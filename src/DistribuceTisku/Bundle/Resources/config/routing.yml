@@ -35,32 +35,44 @@ _logout:
     path:   /logout
     defaults:  { _controller: DistribuceTiskuBundle:Security:logout }
     
-_customeradd:    
-    pattern:  /customeradd
+_customerAdd:    
+    pattern:  /customerAdd
     defaults: { _controller: DistribuceTiskuBundle:Form:customeradd }
     requirements:   
         _method: GET|POST
         
-_bookadd:    
-    pattern:  /bookadd
+_customerEdit:    
+    pattern:  /customerAdd
+    defaults: { _controller: DistribuceTiskuBundle:Form:customeradd }
+    requirements:   
+        _method: GET|POST
+        
+_customerRemove:    
+    pattern:  /customerAdd
+    defaults: { _controller: DistribuceTiskuBundle:Form:customeradd }
+    requirements:   
+        _method: GET|POST        
+        
+_bookAdd:    
+    pattern:  /bookAdd
     defaults: { _controller: DistribuceTiskuBundle:Form:bookadd }
     requirements:   
         _method: GET|POST
         
-_supplieradd:    
-    pattern:  /supplieradd
+_supplierAdd:    
+    pattern:  /supplierAdd
     defaults: { _controller: DistribuceTiskuBundle:Form:supplieradd }
     requirements:   
         _method: GET|POST
         
-_subscriptionadd:    
-    pattern:  /subscriptionadd
+_subscriptionAdd:    
+    pattern:  /subscriptionAdd
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionadd }
     requirements:   
         _method: GET|POST
         
-_subscriptionInteruptionadd:    
-    pattern:  /subscriptionInteruptionadd
+_subscriptionInteruptionAdd:    
+    pattern:  /subscriptionInteruptionAdd
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInteruptionadd }
     requirements:   
         _method: GET|POST

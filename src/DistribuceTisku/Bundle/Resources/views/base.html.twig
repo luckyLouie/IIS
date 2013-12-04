@@ -49,20 +49,20 @@
                 {% block sidebar %}{% endblock %}
                 {% if app.session.get('type') == "0" %}  
                 <ul>
-                    <li><a href="{{ path('_customeradd')}}">Přidat zákazníka</a></li>
-                    <li><a href="{{ path('_about')}}">Editovat zákazníka </a></li>
-                    <li><a href="{{ path('_about')}}">Odebrat zákazníka </a></li>
-                    <li><a href="{{ path('_bookadd')}}">Přidat tiskoviny</a></li>
-                    <li><a href="{{ path('_about')}}">Editovat tiskovyny</a></li>
-                    <li><a href="{{ path('_supplieradd')}}">Přidat doručovatele</a></li>
-                    <li><a href="{{ path('_about')}}">Editovat doručovatele</a></li>
-                    <li><a href="{{ path('_about')}}">Odebrat doručovatele</a></li>
-                    <li><a href="{{ path('_subscriptionadd')}}">Zadat odběr</a></li>
-                    <li><a href="{{ path('_about')}}">Upravit odběr</a></li>
-                    <li><a href="{{ path('_about')}}">Odebrat odběr</a></li>
-                    <li><a href="{{ path('_about')}}">Prohlížet odběr</a></li>
-                    <li><a href="{{ path('_about')}}">Přerušení odběru</a></li>
-                    <li><a href="{{ path('_about')}}">Upravit profil</a></li>
+                    <li><a href="{{ path('_customerAdd')}}">Přidat zákazníka</a></li>
+                    <li><a href="{{ path('_customerEdit')}}">Editovat zákazníka </a></li>
+                    <li><a href="{{ path('_customerRemove')}}">Odebrat zákazníka </a></li>
+                    <li><a href="{{ path('_bookAdd')}}">Přidat tiskoviny</a></li>
+                    <li><a href="{{ path('_bookEdit')}}">Editovat tiskoviny</a></li>
+                    <li><a href="{{ path('_supplierAdd')}}">Přidat doručovatele</a></li>
+                    <li><a href="{{ path('_supplierEdit')}}">Editovat doručovatele</a></li>
+                    <li><a href="{{ path('_supplierRemove')}}">Odebrat doručovatele</a></li>
+                    <li><a href="{{ path('_subscriptionAdd')}}">Zadat odběr</a></li>
+                    <li><a href="{{ path('_subscriptionEdit')}}">Upravit odběr</a></li>
+                    <li><a href="{{ path('_subscriptionRemove')}}">Odebrat odběr</a></li>
+                    <li><a href="{{ path('_subscription')}}">Prohlížet odběr</a></li>
+                    <li><a href="{{ path('_subscriptionInterruption')}}">Přerušení odběru</a></li>
+                    <li><a href="{{ path('_profile')}}">Upravit profil</a></li>
                 </ul>
                 {% elseif app.session.get('type') == "1" %}
                 <ul>

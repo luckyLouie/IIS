@@ -14,7 +14,7 @@
     </div>
     {% endfor %}
 
-    <form action="{{ path('_supplieradd') }}" method="post" {{ form_enctype(form) }} class="blogger">
+    <form action="{{ path('_supplierAdd') }}" method="post" {{ form_enctype(form) }} class="blogger">
         {{ form_errors(form) }}
 
         {{ form_row(form.jmeno) }}
