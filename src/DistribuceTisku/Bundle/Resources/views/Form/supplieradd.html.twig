@@ -1,0 +1,30 @@
+
+{% extends 'DistribuceTiskuBundle::layout.html.twig' %}
+
+{% block title %}Přidat dodavatele{% endblock%}
+
+{% block body %}
+    <header>
+        <h1>Přidat dodavatele</h1>
+    </header>
+
+    {% for flashMessage in app.session.flashbag.get('vlozeni') %}
+    <div class="blogger-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %}
+
+    <form action="{{ path('_supplieradd') }}" method="post" {{ form_enctype(form) }} class="blogger">
+        {{ form_errors(form) }}
+
+        {{ form_row(form.jmeno) }}
+        {{ form_row(form.prijmeni) }}
+        {{ form_row(form.adresa) }}
+        {{ form_row(form.psc) }}
+        {{ form_row(form.telefon) }}
+
+        {{ form_rest(form) }}
+
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}{# empty Twig template #}

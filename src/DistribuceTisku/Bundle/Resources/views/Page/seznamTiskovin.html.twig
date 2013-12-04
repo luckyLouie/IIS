@@ -1,0 +1,14 @@
+
+{% extends 'DistribuceTiskuBundle::layout.html.twig' %}
+
+{% block title %}Seznam tiskovin{% endblock%}
+
+{% block body %}
+    <header>
+        <h1>Seznam Tiskovin</h1>
+    </header>
+
+    {% for tiskovina in tiskoviny %}
+        {{ tiskovina.titul }}
+    {% endfor %}
+{% endblock %}

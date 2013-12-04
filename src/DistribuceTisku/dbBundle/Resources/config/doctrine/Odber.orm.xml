@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="DistribuceTisku\dbBundle\Entity\Odber" table="odber">
+    <id name="idOdberu" type="integer" column="id_odberu">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="denOdberu" type="string" column="den_odberu" length="15" nullable="false"/>
+    <field name="odberOd" type="date" column="odber_od" nullable="false"/>
+    <field name="odberDo" type="date" column="odber_do" nullable="false"/>
+    <field name="idZakaznika" type="integer" column="id_zakaznika" nullable="false"/>
+    <field name="issn" type="string" column="ISSN" length="10" nullable="false"/>
+    <field name="idPlatby" type="integer" column="id_platby" nullable="true"/>
+  </entity>
+</doctrine-mapping>

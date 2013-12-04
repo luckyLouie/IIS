@@ -1,0 +1,10 @@
+
+{% extends 'DistribuceTiskuBundle::base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}      {# prida obsah z rodicovskeho bloku #}
+    <link href="{{ asset('css/blog.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="DistribuceTisku\dbBundle\Entity\Zakaznik" table="zakaznik">
+    <id name="idZakaznika" type="integer" column="id_zakaznika">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="jmeno" type="string" column="jmeno" length="20" nullable="false"/>
+    <field name="prijmeni" type="string" column="prijmeni" length="30" nullable="false"/>
+    <field name="titul" type="string" column="titul" length="15" nullable="true"/>
+    <field name="adresa" type="string" column="adresa" length="30" nullable="false"/>
+    <field name="psc" type="string" column="psc" length="30" nullable="false"/>
+    <field name="bankovniSpojeni" type="string" column="bankovni_spojeni" length="30" nullable="false"/>
+    <field name="kontaktniUdaj" type="string" column="kontaktni_udaj" length="30" nullable="false"/>
+    <field name="idDodavatele" type="integer" column="id_dodavatele" nullable="true"/>
+  </entity>
+</doctrine-mapping>

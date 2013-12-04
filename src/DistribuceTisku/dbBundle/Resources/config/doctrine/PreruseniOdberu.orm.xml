@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="DistribuceTisku\dbBundle\Entity\PreruseniOdberu" table="preruseni_odberu">
+    <id name="idPreruseni" type="integer" column="id_preruseni">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="preruseniOd" type="date" column="preruseni_od" nullable="false"/>
+    <field name="preruseniDo" type="date" column="preruseni_do" nullable="false"/>
+    <field name="idOdberu" type="integer" column="id_odberu" nullable="false"/>
+  </entity>
+</doctrine-mapping>

@@ -1,0 +1,31 @@
+
+{% extends 'DistribuceTiskuBundle::layout.html.twig' %}
+
+{% block title %}Přidat titul{% endblock%}
+
+{% block body %}
+    <header>
+        <h1>Přidat titul</h1>
+    </header>
+
+    {% for flashMessage in app.session.flashbag.get('vlozeni') %}
+    <div class="blogger-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %}
+
+    <form action="{{ path('_customeradd') }}" method="post" {{ form_enctype(form) }} class="blogger">
+        {{ form_errors(form) }}
+
+        {{ form_row(form.issn) }}
+        {{ form_row(form.titul) }}
+        {{ form_row(form.cena) }}
+        {{ form_row(form.denVydani) }}
+        {{ form_row(form.nakladatelstvi) }}
+        {{ form_row(form.vydavatel) }}
+
+        {{ form_rest(form) }}
+
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}

@@ -1,0 +1,28 @@
+{# src/Acme/SecurityBundle/Resources/views/Security/login.html.twig #}
+
+{% extends 'DistribuceTiskuBundle::layout.html.twig' %}
+
+{% block title %}Log in{% endblock%}    
+
+{% block body %}
+    
+    <header>
+        <h1>Log in account</h1>
+    </header>
+    
+    <p>Fill your username and password to login</p>
+    
+    <form action="{{ path('_login_check') }}" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="_username" />
+        <br />
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="_password" />
+        <br />
+        <button type="submit">login</button>
+    </form>
+    
+    
+    
+
+{% endblock %}

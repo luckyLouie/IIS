@@ -1,0 +1,66 @@
+_homepage:
+    pattern:  /
+    defaults: { _controller: DistribuceTiskuBundle:Page:index }
+    requirements:   
+        _method: GET
+    
+_about:    
+    pattern:  /about
+    defaults: { _controller: DistribuceTiskuBundle:Page:about }
+    requirements:   
+        _method: GET
+        
+_contact:    
+    pattern:  /contact
+    defaults: { _controller: DistribuceTiskuBundle:Page:contact }
+    requirements:   
+        _method: GET|POST       
+
+
+_seznamTiskovin:    
+    pattern:  /seznamTiskovin
+    defaults: { _controller: DistribuceTiskuBundle:Page:seznamTiskovin }
+    requirements:   
+        _method: GET
+        
+_login:
+    path:   /login
+    defaults:  { _controller: DistribuceTiskuBundle:Security:login }
+
+_login_check:
+    path:   /login_check
+    defaults:  { _controller: DistribuceTiskuBundle:Security:login_check }
+    
+_logout:
+    path:   /logout
+    defaults:  { _controller: DistribuceTiskuBundle:Security:logout }
+    
+_customeradd:    
+    pattern:  /customeradd
+    defaults: { _controller: DistribuceTiskuBundle:Form:customeradd }
+    requirements:   
+        _method: GET|POST
+        
+_bookadd:    
+    pattern:  /bookadd
+    defaults: { _controller: DistribuceTiskuBundle:Form:bookadd }
+    requirements:   
+        _method: GET|POST
+        
+_supplieradd:    
+    pattern:  /supplieradd
+    defaults: { _controller: DistribuceTiskuBundle:Form:supplieradd }
+    requirements:   
+        _method: GET|POST
+        
+_subscriptionadd:    
+    pattern:  /subscriptionadd
+    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionadd }
+    requirements:   
+        _method: GET|POST
+        
+_subscriptionInteruptionadd:    
+    pattern:  /subscriptionInteruptionadd
+    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInteruptionadd }
+    requirements:   
+        _method: GET|POST

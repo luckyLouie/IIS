@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="DistribuceTisku\dbBundle\Entity\Tiskovina" table="tiskovina">
+    <id name="issn" type="string" column="ISSN" length="10">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="cena" type="float" column="cena" nullable="false"/>
+    <field name="titul" type="string" column="titul" length="100" nullable="false"/>
+    <field name="denVydani" type="string" column="den_vydani" length="15" nullable="true"/>
+    <field name="nakladatelstvi" type="string" column="nakladatelstvi" length="30" nullable="false"/>
+    <field name="vydavatel" type="string" column="vydavatel" length="30" nullable="false"/>
+  </entity>
+</doctrine-mapping>

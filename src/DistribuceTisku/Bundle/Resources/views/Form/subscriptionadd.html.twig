@@ -1,0 +1,30 @@
+
+{% extends 'DistribuceTiskuBundle::layout.html.twig' %}
+
+{% block title %}Zadat odběr{% endblock%}
+
+{% block body %}
+    <header>
+        <h1>Zadat odběr</h1>
+    </header>
+
+    {% for flashMessage in app.session.flashbag.get('vlozeni') %}
+    <div class="blogger-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %}
+
+    <form action="{{ path('_subscriptionadd') }}" method="post" {{ form_enctype(form) }} class="blogger">
+        {{ form_errors(form) }}
+
+        {{ form_row(form.denOdberu) }}
+        {{ form_row(form.odberOd) }}
+        {{ form_row(form.odberDo) }}
+        {{ form_row(form.zakaznik) }}
+        {{ form_row(form.issn) }}
+
+        {{ form_rest(form) }}
+
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}{# empty Twig template #}

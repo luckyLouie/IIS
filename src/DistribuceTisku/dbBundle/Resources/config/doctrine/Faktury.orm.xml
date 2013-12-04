@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="DistribuceTisku\dbBundle\Entity\Faktury" table="faktury">
+    <id name="idFaktury" type="integer" column="id_faktury">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="datumVystaveni" type="date" column="datum_vystaveni" nullable="false"/>
+    <field name="datumSplatnosti" type="date" column="datum_splatnosti" nullable="false"/>
+    <field name="vyslednaCena" type="float" column="vysledna_cena" nullable="false"/>
+    <field name="idPlatby" type="integer" column="id_platby" nullable="false"/>
+  </entity>
+</doctrine-mapping>

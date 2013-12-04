@@ -1,0 +1,7 @@
+parameters:
+#    distribuce_tisku.example.class: DistribuceTisku\Bundle\Example
+
+services:
+#    distribuce_tisku.example:
+#        class: %distribuce_tisku.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
