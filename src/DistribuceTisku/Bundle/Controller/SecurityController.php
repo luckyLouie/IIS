@@ -22,13 +22,12 @@ class SecurityController extends Controller
         $type = "";
         
         $conn = $this->get('database_connection');
-        $sql = "SELECT type, person_id FROM users WHERE passwd = :pass AND user_id = :user";
+        $sql = "SELECT type, person_id FROM users WHERE passwd = '".$pass."' AND user_id = '".$user."'";
         $stmt = $conn->prepare($sql);
-        $stmt->bindValue("pass", $user);
-        $stmt->bindValue("user", $pass);
         $stmt->execute();
         
         foreach($stmt as $one){
+            echo $one["type"];
             $type = $one["type"];
             $id = $one["person_id"];
         }

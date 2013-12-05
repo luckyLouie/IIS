@@ -46,7 +46,7 @@ _customerEdit:
     defaults: { _controller: DistribuceTiskuBundle:Customer:customerEdit }
     requirements:   
         _method: GET|POST
-        
+
 _customerEditById:    
     pattern:  /customerEditById/{id}
     defaults: { _controller: DistribuceTiskuBundle:Customer:customerEditById }
@@ -115,7 +115,7 @@ _supplierRemove:
         
 _subscriptionAdd:    
     pattern:  /subscriptionAdd
-    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionadd }
+    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionAdd }
     requirements:   
         _method: GET|POST
 
@@ -137,6 +137,12 @@ _subscription:
     requirements:   
         _method: GET|POST
         
+_subscriptionList:    
+    pattern:  /subscriptionList
+    defaults: { _controller: DistribuceTiskuBundle:Subscription:subscriptionList }
+    requirements:   
+        _method: GET|POST
+        
 _subscriptionInteruptionAdd:    
     pattern:  /subscriptionInteruptionAdd
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInteruptionadd }
@@ -147,4 +153,22 @@ _profile:
     pattern:  /profile
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInteruptionadd }
     requirements:   
-        _method: GET|POST        
+        _method: GET|POST     
+        
+_subscriptionRemoveById:    
+    pattern:  /subscriptionRemoveById/{id}
+    defaults: { _controller: DistribuceTiskuBundle:Customer:subscriptionRemove }
+    requirements:   
+        _method: GET|POST
+        
+_subscriptionEditById:    
+    pattern:  /subscriptionEditById/{id}
+    defaults: { _controller: DistribuceTiskuBundle:Customer:subscriptionEdit }
+    requirements:   
+        _method: GET|POST
+        
+_subscriptionInterruptById:    
+    pattern:  /subscriptionInterruptById/{id}
+    defaults: { _controller: DistribuceTiskuBundle:Customer:subscriptionInterrup }
+    requirements:   
+        _method: GET|POST

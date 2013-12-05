@@ -14,11 +14,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Supplier {
     
+    protected $login;
+    protected $password;
     protected $jmeno;
     protected $prijmeni;
     protected $adresa;
     protected $psc;
     protected $telefon;
+
+    public function getLogin() {
+        return $this->login;
+    }
+
+    public function getPassword() {
+        return $this->password;
+    }
 
     public function getJmeno()
     {
@@ -45,43 +55,34 @@ class Supplier {
         return $this->telefon;
     }
     
-    public function setJmeno()
-    {
-        $this->jmeno;
+    public function setLogin($login) {
+        $this->login = $login;
     }
+
+    public function setPassword($password) {
+        $this->password = $password;
+    }
+   
+    public function setJmeno($jmeno) {
+        $this->jmeno = $jmeno;
+    }
+
+    public function setPrijmeni($prijmeni) {
+        $this->prijmeni = $prijmeni;
+    }
+
+    public function setAdresa($adresa) {
+        $this->adresa = $adresa;
+    }
+
+    public function setPsc($psc) {
+        $this->psc = $psc;
+    }
+
+    public function setTelefon($telefon) {
+        $this->telefon = $telefon;
+    }
+
+
     
-    public function setPrijmeni()
-    {
-        $this->prijmeni;
-    }
-    
-    public function setAdresa()
-    {
-        $this->adresa;
-    }
-    
-    public function setPsc()
-    {
-        $this->psc;
-    }
-    
-    public function setTelefon()
-    {
-        $this->telefon;
-    }
-    
-    public static function loadValidatorMetadata(ClassMetadata $metadata){
-        $metadata->addPropertyConstraint('jmeno', new NotBlank());
-        $metadata->addPropertyConstraint('prijmeni', new NotBlank());
-        $metadata->addPropertyConstraint('adresa', new NotBlank());
-        $metadata->addPropertyConstraint('psc', new NotBlank());
-        
-             
-       $metadata->addPropertyConstraint('telefon', new Assert\Length(array(
-        'min'        => 9,
-        'max'        => 9,
-        'minMessage' => 'Telefoní číslo musí být ve tvaru XXXXXXXXX',
-        'maxMessage' => 'Telefoní číslo musí být ve tvaru XXXXXXXXX',
-        )));
-    }
 }

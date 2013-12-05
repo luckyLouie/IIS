@@ -19,12 +19,14 @@ use Symfony\Component\Form\FormBuilderInterface;
 class SubscriptionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {        
+        $builder->add('uzivatel', 'choice');
         $builder->add('denOdberu');
         $builder->add('odberOd');
         $builder->add('odberDo');
         $builder->add('zakaznik');
         $builder->add('titul');
+        $builder->add('issn');
     }
 
     public function getName()

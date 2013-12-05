@@ -13,13 +13,23 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Subscription {
-    
+
+    protected $uzivatel;
     protected $denOdberu;
     protected $odberOd;
     protected $odberDo;
     protected $zakaznik;
     protected $titul;
+    protected $issn;
 
+    public function getUzivatel() {
+        return $this->uzivatel;
+    }
+
+    public function getIssn() {
+        return $this->issn;
+    }
+    
     public function getDenOdberu()
     {
         return $this->denOdberu;
@@ -44,37 +54,32 @@ class Subscription {
     {
         return $this->titul;
     }
-    
-    public function setDenOdberu()
-    {
-        $this->denOdberu;
+
+    public function setUzivatel($uzivatel) {
+        $this->uzivatel = $uzivatel;
     }
-    
-    public function setOdberOd()
-    {
-        $this->odberOd;
+
+    public function setIssn($issn) {
+        $this->issn = $issn;
     }
-    
-    public function setOdberDo()
-    {
-        $this->odberDo;
+
+    public function setDenOdberu($denOdberu) {
+        $this->denOdberu = $denOdberu;
     }
-    
-    public function setZakaznik()
-    {
-        $this->zakaznik;
+
+    public function setOdberOd($odberOd) {
+        $this->odberOd = $odberOd;
     }
-    
-    public function setTitul()
-    {
-        $this->titul;
+
+    public function setOdberDo($odberDo) {
+        $this->odberDo = $odberDo;
     }
-    
-    public static function loadValidatorMetadata(ClassMetadata $metadata){
-        $metadata->addPropertyConstraint('denOdberu', new NotBlank());
-        $metadata->addPropertyConstraint('odberOd', new NotBlank());
-        $metadata->addPropertyConstraint('odberDo', new NotBlank());
-        $metadata->addPropertyConstraint('zakaznik', new NotBlank());
-        $metadata->addPropertyConstraint('titul', new NotBlank());
+
+    public function setZakaznik($zakaznik) {
+        $this->zakaznik = $zakaznik;
+    }
+
+    public function setTitul($titul) {
+        $this->titul = $titul;
     }
 }

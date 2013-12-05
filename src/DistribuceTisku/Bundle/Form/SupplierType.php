@@ -20,6 +20,8 @@ class SupplierType extends AbstractType
         $builder->add('adresa');
         $builder->add('psc');
         $builder->add('telefon');
+        $builder->add('login');
+        $builder->add('password');
     }
 
     public function getName()

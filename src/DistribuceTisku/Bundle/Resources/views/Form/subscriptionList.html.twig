@@ -1,0 +1,40 @@
+
+{% extends 'DistribuceTiskuBundle::layout.html.twig' %}
+
+{% block title %}Seznam odběrů{% endblock%}
+
+{% block body %}
+    <header>
+        <h1>Seznam odběrů</h1>
+    </header>
+<table>
+    <thead>
+        <th>id</th>
+        <th>Den odběru</th>
+        <th>Od</th>
+        <th>Do</th>
+        <th>Jméno</th>
+        <th>Přijmení</th>
+        <th>Titul</th>
+        <th>Platba</th>
+        <th>upravit</th>
+        <th>přerušit</th>
+        <th>smazat</th>
+    </thead>
+    {% for odber in odbery %}
+    <tr>
+        <td>{{ odber.id_odberu }}</td>
+        <td>{{ odber.den_odberu }}</td>
+        <td>{{ odber.odber_od }}</td>
+        <td>{{ odber.odber_do }}</td>
+        <td>{{ odber.jmeno }}</td>
+        <td>{{ odber.prijmeni }}</td>
+        <td>{{ odber.titul }}</td>
+        <td>{{ odber.id_platby }}</td>
+        <td><a href="{{ path('_subscriptionEditById',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/edit.png') }}" alt="změnit odběr" width="20" height="20"></a></td>
+        <td><a href="{{ path('_subscriptionInterruptById',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/interrupt.png') }}" alt="přerušit odběr" width="20" height="20"></a></td>
+        <td><a href="{{ path('_subscriptionRemoveById',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat odběr" width="20" height="20"></a></td>
+    </tr>    
+    {% endfor %}
+</table>
+{% endblock %}
