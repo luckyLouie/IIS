@@ -8,6 +8,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class CustomerController extends Controller
 {
+      function getCustomerByName($name){
+         $customer = new Customer();     
+         $conn = $this->get('database_connection');
+         $users = $conn->fetchAll('SELECT * FROM zakaznik WHERE id_zakaznika=5');
+         foreach($users as $user)
+         {
+             $customer->setJmeno($user['jmeno']);
+             $customer->setPrijmeni($user['prijmeni']);
+             $customer->setAdresa($user['adresa']);
+             $customer->setBankovniSpojeni($user['bankovni_spojeni']);
+             $customer->setPsc($user['psc']);
+             $customer->setTelefon($user['kontaktni_udaj']);
+             $customer->setTitul($user['titul']);
+             return $customer;
+         }
+    }
     
     public function customerAddAction()
     {
@@ -41,21 +57,36 @@ class CustomerController extends Controller
     }
     
     public function customerEditAction()
-    {
-        $customer = new Customer();       
-        $form = $this->createForm(new CustomerType(), $customer);
+    {        
         $user = $this->getRequest()->getSession()->get("user");
+        $customer = $this->getCustomerByName($user);
+        $customer->setLogin("login");
+        
+        $form = $this->createForm(new CustomerType(), $customer);
+
               
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
 
         }
-        return $this->render('DistribuceTiskuBundle:Form:customerAdd.html.twig', array(
+        return $this->render('DistribuceTiskuBundle:Form:customeredit.html.twig', array(
             'form' => $form->createView()
         ));
         
     }
    
+    public function customerListAction(){                      
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+
+        }
+
+        $conn = $this->get('database_connection');
+        $zakaznici = $conn->fetchAll('SELECT * FROM zakaznik ORDER BY id_zakaznika ASC');
+        return $this->render('DistribuceTiskuBundle:Form:customerlist.html.twig', array('zakaznici' => $zakaznici));
+        
+    }
+    
     public function customerRemoveAction()
     {
         $conn = $this->get('database_connection');
@@ -65,5 +96,6 @@ class CustomerController extends Controller
         $stmt->bindValue("user", $pass);
         $stmt->execute();
         
-    } 
+    }
+    
 }

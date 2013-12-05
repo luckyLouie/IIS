@@ -1,0 +1,36 @@
+
+{% extends 'DistribuceTiskuBundle::layout.html.twig' %}
+
+{% block title %}Seznam zákázníků{% endblock%}
+
+{% block body %}
+    <header>
+        <h1>Seznam zákázníků</h1>
+    </header>
+<table>
+    <thead>
+        <th>id</th>
+        <th>jméno</th>
+        <th>příjmení</th>
+        <th>titul</th>
+        <th>adresa</th>
+        <th>psč</th>
+        <th>bankovní spojení</th>
+        <th>kontaktní údaj</th>
+        <th>smazat</th>
+    </thead>
+    {% for zakaznik in zakaznici %}
+    <tr>
+        <td>{{ zakaznik.id_zakaznika }}</td>
+        <td>{{ zakaznik.jmeno }}</td>
+        <td>{{ zakaznik.prijmeni }}</td>
+        <td>{{ zakaznik.titul }}</td>
+        <td>{{ zakaznik.adresa }}</td>
+        <td>{{ zakaznik.psc }}</td>
+        <td>{{ zakaznik.bankovni_spojeni }}</td>
+        <td>{{ zakaznik.kontaktni_udaj }}</td>
+        <td><a href="{{ path('_customerRemoveById',{'id' : zakaznik.id_zakaznika} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat zakaznika" width="20" height="20"></a></td>
+    </tr>    
+    {% endfor %}
+</table>
+{% endblock %}
