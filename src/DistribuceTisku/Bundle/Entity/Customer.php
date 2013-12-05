@@ -69,50 +69,42 @@ class Customer {
         return $this->telefon;
     }
     
-    public function setLogin()
-    {
-        $this->login;
+    
+    public function setLogin($login) {
+        $this->login = $login;
     }
-    
-    public function setPassword()
-    {
-        $this->password;
+
+    public function setPassword($password) {
+        $this->password = $password;
     }
-    
-    public function setJmeno($default)
-    {
-        $this->jmeno = $default;
+
+    public function setJmeno($jmeno) {
+        $this->jmeno = $jmeno;
     }
-    
-    public function setPrijmeni()
-    {
-        $this->prijmeni;
+
+    public function setPrijmeni($prijmeni) {
+        $this->prijmeni = $prijmeni;
     }
-    
-    public function setTitul()
-    {
-        $this->titul;
+
+    public function setTitul($titul) {
+        $this->titul = $titul;
     }
-    
-    public function setAdresa()
-    {
-        $this->adresa;
+
+    public function setAdresa($adresa) {
+        $this->adresa = $adresa;
     }
-    
-    public function setPsc()
-    {
-        $this->psc;
+
+    public function setPsc($psc) {
+        $this->psc = $psc;
     }
-    
-    public function setBankovniSpojeni()
-    {
-        $this->bankovniSpojeni;
+
+    public function setBankovniSpojeni($bankovniSpojeni) {
+        $this->bankovniSpojeni = $bankovniSpojeni;
     }
-    
-    public function setTelefon()
-    {
-        $this->telefon;
+
+    public function setTelefon($telefon) {
+        $this->telefon = $telefon;
     }
-    
-    
+
+
 }

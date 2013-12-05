@@ -37,36 +37,78 @@ _logout:
     
 _customerAdd:    
     pattern:  /customerAdd
-    defaults: { _controller: DistribuceTiskuBundle:Form:customeradd }
+    defaults: { _controller: DistribuceTiskuBundle:Customer:customerAdd }
     requirements:   
         _method: GET|POST
         
 _customerEdit:    
-    pattern:  /customerAdd
-    defaults: { _controller: DistribuceTiskuBundle:Form:customeradd }
+    pattern:  /customerEdit
+    defaults: { _controller: DistribuceTiskuBundle:Customer:customerEdit }
     requirements:   
         _method: GET|POST
         
 _customerRemove:    
-    pattern:  /customerAdd
-    defaults: { _controller: DistribuceTiskuBundle:Form:customeradd }
+    pattern:  /customerRemove
+    defaults: { _controller: DistribuceTiskuBundle:Customer:customerRemove }
     requirements:   
         _method: GET|POST        
         
 _bookAdd:    
     pattern:  /bookAdd
-    defaults: { _controller: DistribuceTiskuBundle:Form:bookadd }
+    defaults: { _controller: DistribuceTiskuBundle:Form:bookAdd }
+    requirements:   
+        _method: GET|POST
+
+_bookEdit:
+    pattern:  /bookEdit
+    defaults: { _controller: DistribuceTiskuBundle:Form:bookEdit }
     requirements:   
         _method: GET|POST
         
+_bookRemove:
+    pattern:  /bookRemove
+    defaults: { _controller: DistribuceTiskuBundle:Form:bookRemove }
+    requirements:   
+        _method: GET|POST    
+    
 _supplierAdd:    
     pattern:  /supplierAdd
     defaults: { _controller: DistribuceTiskuBundle:Form:supplieradd }
     requirements:   
         _method: GET|POST
+
+_supplierEdit:    
+    pattern:  /supplierEdit
+    defaults: { _controller: DistribuceTiskuBundle:Form:supplierEdit }
+    requirements:   
+        _method: GET|POST
+
+_supplierRemove:    
+    pattern:  /supplierRemove
+    defaults: { _controller: DistribuceTiskuBundle:Form:supplierRemove }
+    requirements:   
+        _method: GET|POST
         
 _subscriptionAdd:    
     pattern:  /subscriptionAdd
+    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionadd }
+    requirements:   
+        _method: GET|POST
+
+_subscriptionEdit:    
+    pattern:  /subscriptionEdit
+    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionEdit }
+    requirements:   
+        _method: GET|POST
+        
+_subscriptionRemove:    
+    pattern:  /subscriptionAdd
+    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionRemove }
+    requirements:   
+        _method: GET|POST 
+        
+_subscription:    
+    pattern:  /subscription
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionadd }
     requirements:   
         _method: GET|POST
@@ -76,3 +118,9 @@ _subscriptionInteruptionAdd:
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInteruptionadd }
     requirements:   
         _method: GET|POST
+        
+_profile:    
+    pattern:  /profile
+    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInteruptionadd }
+    requirements:   
+        _method: GET|POST        
