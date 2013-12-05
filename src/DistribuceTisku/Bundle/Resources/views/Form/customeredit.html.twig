@@ -2,5 +2,10 @@
 
 
     {% block form %}
-    <form action="{{ path('_customerEdit') }}" method="post" {{ form_enctype(form) }} class="blogger">
-    {% endblock %}   
+<form action="{{ path('_customerEdit')}}" method="post" {{ form_enctype(form) }} class="blogger">
+    {% endblock %}  
+
+
+    {% block formRest %}
+
+    {% endblock %} 

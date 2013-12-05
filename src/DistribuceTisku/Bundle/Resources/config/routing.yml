@@ -46,6 +46,18 @@ _customerEdit:
     defaults: { _controller: DistribuceTiskuBundle:Customer:customerEdit }
     requirements:   
         _method: GET|POST
+        
+_customerEditById:    
+    pattern:  /customerEditById/{id}
+    defaults: { _controller: DistribuceTiskuBundle:Customer:customerEditById }
+    requirements:   
+        _method: GET|POST 
+        
+_customerEditByName:    
+    pattern:  /customerEditByName/{name}
+    defaults: { _controller: DistribuceTiskuBundle:Customer:customerEditByName }
+    requirements:   
+        _method: GET|POST           
 
 _customerRemove:    
     pattern:  /customerRemove
@@ -55,7 +67,7 @@ _customerRemove:
         
 _customerRemoveById:    
     pattern:  /customerRemoveById/{id}
-    defaults: { _controller: DistribuceTiskuBundle:Customer:customerRemove }
+    defaults: { _controller: DistribuceTiskuBundle:Customer:customerRemoveById }
     requirements:   
         _method: GET|POST        
 

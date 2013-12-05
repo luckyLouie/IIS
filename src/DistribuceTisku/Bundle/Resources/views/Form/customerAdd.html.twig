@@ -15,7 +15,9 @@
     </div>
     {% endfor %}
 
+    {% block form %}
     <form action="{{ path('_customerAdd') }}" method="post" {{ form_enctype(form) }} class="blogger">
+    {% endblock %}  
         {{ form_errors(form) }}
 
         {{ form_row(form.jmeno) }}
@@ -26,9 +28,9 @@
         {{ form_row(form.prijmeni) }}
         {{ form_row(form.bankovniSpojeni) }}
         {{ form_row(form.telefon) }}
-
+    {% block formRest %}
         {{ form_rest(form) }}
-
+    {% endblock %} 
         <input type="submit" value="Submit" />
     </form>
 {% endblock %}

@@ -30,7 +30,7 @@ class SecurityController extends Controller
         
         foreach($stmt as $one){
             $type = $one["type"];
-            $id = $one["id"];
+            $id = $one["person_id"];
         }
         
         if($type != ""){
