@@ -1,0 +1,11 @@
+{% extends 'DistribuceTiskuBundle:Form:bookadd.html.twig' %}
+
+
+    {% block form %}
+<form action="{{ path('_bookEdit', {'id':  form.vars.value.ISSN  })}}" method="post" {{ form_enctype(form) }} class="blogger">
+    {% endblock %}   
+
+
+    {% block formRest %}
+
+    {% endblock %} 

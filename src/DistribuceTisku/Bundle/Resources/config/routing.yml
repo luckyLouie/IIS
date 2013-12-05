@@ -84,16 +84,17 @@ _bookAdd:
         _method: GET|POST
 
 _bookEdit:
-    pattern:  /bookEdit
+    pattern:  /bookEdit/{id}
     defaults: { _controller: DistribuceTiskuBundle:Form:bookEdit }
     requirements:   
         _method: GET|POST
-        
-_bookRemove:
-    pattern:  /bookRemove
-    defaults: { _controller: DistribuceTiskuBundle:Form:bookRemove }
+
+_bookList:
+    pattern:  /bookList
+    defaults: { _controller: DistribuceTiskuBundle:Form:bookList }
     requirements:   
-        _method: GET|POST    
+        _method: GET|POST        
+         
     
 _supplierAdd:    
     pattern:  /supplierAdd
@@ -114,7 +115,7 @@ _supplierRemove:
         _method: GET|POST
         
 _subscriptionAdd:    
-    pattern:  /subscriptionAdd
+    pattern:  /subscriptionAdd/{id}
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionAdd }
     requirements:   
         _method: GET|POST
@@ -139,7 +140,7 @@ _subscription:
         
 _subscriptionList:    
     pattern:  /subscriptionList
-    defaults: { _controller: DistribuceTiskuBundle:Subscription:subscriptionList }
+    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionList }
     requirements:   
         _method: GET|POST
         

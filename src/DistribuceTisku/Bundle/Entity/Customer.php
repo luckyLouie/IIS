@@ -8,12 +8,9 @@
 
 namespace DistribuceTisku\Bundle\Entity;
 
-use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints as Assert;
-
 class Customer {
     
+    protected $id;
     protected $login;
     protected $password;
     protected $jmeno;
@@ -57,6 +54,11 @@ class Customer {
     public function getPsc()
     {
         return $this->psc;
+    }
+    
+      public function getId()
+    {
+        return $this->id;
     }
     
     public function getBankovniSpojeni()
@@ -105,6 +107,9 @@ class Customer {
     public function setTelefon($telefon) {
         $this->telefon = $telefon;
     }
-
+    public function setId($id) {
+        $this->id= $id;
+    }
+       
 
 }

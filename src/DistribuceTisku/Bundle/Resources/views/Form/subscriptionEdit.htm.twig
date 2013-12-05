@@ -1,0 +1,13 @@
+
+{% block title %}Změnit odběr{% endblock%}
+
+
+{% block head %}
+    <header>
+        <h1>Změnit odběr</h1>
+    </header>
+{% endblock %}
+
+{% block form %}
+    <form action="{{ path('_subscriptionAdd',{'id' : odber.id_odberu}) }}" method="post" {{ form_enctype(form) }} class="blogger">
+{% endblock %}

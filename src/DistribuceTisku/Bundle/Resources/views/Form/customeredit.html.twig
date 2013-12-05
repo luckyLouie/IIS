@@ -2,7 +2,7 @@
 
 
     {% block form %}
-<form action="{{ path('_customerEdit')}}" method="post" {{ form_enctype(form) }} class="blogger">
+<form action="{{ path('_customerEditById', {'id':  form.vars.value.id  })}}" method="post" {{ form_enctype(form) }} class="blogger">
     {% endblock %}   
 
 

@@ -22,7 +22,7 @@
     </thead>
     {% for zakaznik in zakaznici %}
     <tr>
-        <td><a href="{{ path('_customerRemoveById',{'id' : zakaznik.id_zakaznika} )}}">{{ zakaznik.id_zakaznika }}</a></td>
+        <td><a href="{{ path('_customerEditById',{'id' : zakaznik.id_zakaznika} )}}">{{ zakaznik.id_zakaznika }}</a></td>
         <td>{{ zakaznik.jmeno }}</td>
         <td>{{ zakaznik.prijmeni }}</td>
         <td>{{ zakaznik.titul }}</td>
@@ -31,7 +31,7 @@
         <td>{{ zakaznik.bankovni_spojeni }}</td>
         <td>{{ zakaznik.kontaktni_udaj }}</td>
         <td><a href="{{ path('_customerRemoveById',{'id' : zakaznik.id_zakaznika} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat zakaznika" width="20" height="20"></a></td>
-        <td><a href="{{ path('_customerEditById',{'id' : zakaznik.id_zakaznika} )}}"><img src="{{ asset('images/edit.jpg') }}" alt="smazat zakaznika" width="20" height="20"></a></td>
+        <td><a href="{{ path('_customerEditById',{'id' : zakaznik.id_zakaznika} )}}"><img src="{{ asset('images/edit.jpg') }}" alt="editovat zakaznika" width="20" height="20"></a></td>
     </tr>    
     {% endfor %}
 </table>

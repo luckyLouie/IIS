@@ -9,20 +9,29 @@
         <h1>Přidat uživatele</h1>
     </header>
 
-    {% for flashMessage in app.session.flashbag.get('vlozeni') %}
+
+    {% for flashMessage in app.session.flashbag.get('ok') %}
     <div class="blogger-notice">
     {{ flashMessage }}
     </div>
     {% endfor %}
 
+    {% for flashMessage in app.session.flashbag.get('exception') %}
+    <div class="exception-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %}  
+
+
+
     {% block form %}
     <form action="{{ path('_customerAdd') }}" method="post" {{ form_enctype(form) }} class="blogger">
     {% endblock %}  
         {{ form_errors(form) }}
-
-        {{ form_row(form.jmeno) }}
+            
+            {{ form_row(form.jmeno) }}
         {{ form_row(form.prijmeni) }}
-        {{ form_row(form.titul) }}
+        {{ form_row(form.titul, {'required': false}) }}
         {{ form_row(form.adresa) }}
         {{ form_row(form.psc) }}
         {{ form_row(form.prijmeni) }}

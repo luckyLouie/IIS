@@ -9,13 +9,22 @@
         <h1>Přidat titul</h1>
     </header>
 
-    {% for flashMessage in app.session.flashbag.get('vlozeni') %}
+    {% for flashMessage in app.session.flashbag.get('ok') %}
     <div class="blogger-notice">
     {{ flashMessage }}
     </div>
     {% endfor %}
 
+    {% for flashMessage in app.session.flashbag.get('exception') %}
+    <div class="exception-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %}  
+
+
+    {% block form %}
     <form action="{{ path('_bookAdd') }}" method="post" {{ form_enctype(form) }} class="blogger">
+    {% endblock %}    
         {{ form_errors(form) }}
 
         {{ form_row(form.issn) }}

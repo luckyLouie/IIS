@@ -5,9 +5,11 @@
 
 
 {% block body %}
+{% block head %}
     <header>
         <h1>Zadat odběr</h1>
     </header>
+{% endblock %}
 
     {% for flashMessage in app.session.flashbag.get('vlozeni') %}
     <div class="blogger-notice">
@@ -15,7 +17,9 @@
     </div>
     {% endfor %}
 
-    <form action="{{ path('_subscriptionAdd') }}" method="post" {{ form_enctype(form) }} class="blogger">
+    {% block form %}
+    <form action="{{ path('_subscriptionAdd',{'id' : "add"}) }}" method="post" {{ form_enctype(form) }} class="blogger">
+    {% endblock %}
         {{ form_errors(form) }}
 
         {{ form_row(form.uzivatel) }}
