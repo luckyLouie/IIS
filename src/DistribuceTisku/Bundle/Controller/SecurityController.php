@@ -19,24 +19,26 @@ class SecurityController extends Controller
         $request = $this->getRequest();
         $user = $request->get("_username");
         $pass = $request->get("_password");
-        $id = "";
+        $type = "";
         
         $conn = $this->get('database_connection');
-        $sql = "SELECT type FROM users WHERE passwd = :pass AND user_id = :user";
+        $sql = "SELECT type, person_id FROM users WHERE passwd = :pass AND user_id = :user";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue("pass", $user);
         $stmt->bindValue("user", $pass);
         $stmt->execute();
         
-        foreach($stmt as $type){
-            $id = $type["type"];
+        foreach($stmt as $one){
+            $type = $one["type"];
+            $id = $one["id"];
         }
         
-        if($id != ""){
+        if($type != ""){
             $session = new Session(); 
             $session->start();
             $session->set('user', $user);
-            $session->set('type', $id);
+            $session->set('type', $type);
+            $session->set('id', $id);
             return $this->render('DistribuceTiskuBundle:Page:index.html.twig');
         }else{
             return$this->render('DistribuceTiskuBundle:Security:login.html.twig');
