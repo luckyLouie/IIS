@@ -27,7 +27,15 @@ class CustomerController extends Controller
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
                 
-                $sql = "INSERT INTO `user` (`user_id`, `passwd`, `type`) VALUES ('".$c['login']."', '".$c['password']."', '2')";
+                $sql = "SELECT `id_zakaznika` FROM `zakaznik` WHERE `jmeno` = '".$c['jmeno']."' AND `prijmeni` = '".$c['prijmeni']."' AND `adresa` = '".$c['adresa']."' LIMIT 1";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+                
+                foreach($stmt as $type){
+                    $id = $type["id_zakaznika"];
+                }
+        
+                $sql = "INSERT INTO `users` (`user_id`, `passwd`, `type`, `person_id`) VALUES ('".$c['login']."', '".$c['password']."', '2', '".$id."')";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
                 
