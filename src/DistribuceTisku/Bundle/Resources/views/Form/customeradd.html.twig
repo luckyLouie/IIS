@@ -13,10 +13,8 @@
     {{ flashMessage }}
     </div>
     {% endfor %}
-    
-    {% block form %}
+
     <form action="{{ path('_customerAdd') }}" method="post" {{ form_enctype(form) }} class="blogger">
-    {% endblock %}        
         {{ form_errors(form) }}
 
         {{ form_row(form.jmeno) }}
