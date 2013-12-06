@@ -1,10 +1,17 @@
 {% extends 'DistribuceTiskuBundle:Form:bookadd.html.twig' %}
 
-
+        {% block h1 %}
+        Upravit titul
+        {% endblock %}
+        
     {% block form %}
 <form action="{{ path('_bookEdit', {'id':  form.vars.value.ISSN  })}}" method="post" {{ form_enctype(form) }} class="blogger">
     {% endblock %}   
-
+    
+    {% block tiskovinaNemenitelne %}
+        <h3>Titul: {{ form.vars.value.titul }}</h3>
+        <h3>ISSN: {{ form.vars.value.ISSN }}</h3>
+    {% endblock %} 
 
     {% block formRest %}
 

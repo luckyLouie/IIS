@@ -15,7 +15,7 @@
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-
+{{ ''|session }}
         <section id="wrapper">
             <header id="header">
                 <div class="top">
@@ -56,7 +56,7 @@
                     <li><a href="{{ path('_supplierAdd')}}">Přidat doručovatele</a></li>
                     <li><a href="{{ path('_supplierList')}}">Prohlížet doručovatele</a></li>
                     <li><a href="{{ path('_subscriptionAdd')}}">Zadat odběr</a></li>
-                    <li><a href="{{ path('_subscriptionList')}}">Procházet odběry</a></li>
+                    <li><a href="{{ path('_subscriptionList')}}">Prohlížet odběry</a></li>
                     <li><a href="{{ path('_profile')}}">Upravit profil</a></li>
                 </ul>
                 {% elseif app.session.get('type') == "1" %}
@@ -66,10 +66,11 @@
                 </ul>
                 {% elseif app.session.get('type') == "2" %}
                 <ul>
-                    <li><a href="{{ path('_about')}}">Zadat odběr</a></li>
+                    <li><a href="{{ path('_ubookList')}}">Seznam tiskovin</a></li>
+                    <li><a href="{{ path('_usubscriptionAdd')}}">Zadat odběr</a></li>
                     <li><a href="{{ path('_about')}}">Upravit odběr</a></li>
                     <li><a href="{{ path('_about')}}">Odebrat odběr</a></li>
-                    <li><a href="{{ path('_about')}}">Prohlížet odběr</a></li>
+                    <li><a href="{{ path('_usubscriptionList')}}">Prohlížet odběry</a></li>
                     <li><a href="{{ path('_about')}}">Přerušení odběru</a></li>
                     <li><a href="{{ path('_about')}}">Upravit profil</a></li>
                 </ul>

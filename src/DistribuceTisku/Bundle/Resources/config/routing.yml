@@ -95,6 +95,12 @@ _bookList:
     requirements:   
         _method: GET|POST        
          
+_ubookList:
+    pattern:  /ubookList
+    defaults: { _controller: DistribuceTiskuBundle:Form:ubookList }
+    requirements:   
+        _method: GET|POST  
+        
     
 _supplierAdd:    
     pattern:  /supplierAdd
@@ -126,6 +132,12 @@ _subscriptionAdd:
     requirements:   
         _method: GET|POST
 
+_usubscriptionAdd:    
+    pattern:  /usubscriptionAdd
+    defaults: { _controller: DistribuceTiskuBundle:Form:usubscriptionAdd }
+    requirements:   
+        _method: GET|POST
+        
 _subscriptionEdit:    
     pattern:  /subscriptionEdit/{id}
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionEdit }
@@ -147,6 +159,12 @@ _subscription:
 _subscriptionList:    
     pattern:  /subscriptionList
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionList }
+    requirements:   
+        _method: GET|POST
+
+_usubscriptionList:    
+    pattern:  /usubscriptionList
+    defaults: { _controller: DistribuceTiskuBundle:Form:usubscriptionList }
     requirements:   
         _method: GET|POST
         

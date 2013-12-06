@@ -1,7 +1,9 @@
 parameters:
 #    distribuce_tisku.example.class: DistribuceTisku\Bundle\Example
 
+
 services:
-#    distribuce_tisku.example:
-#        class: %distribuce_tisku.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    acme.twig.acme_extension:
+        class: DistribuceTisku\Bundle\Twig\AcmeExtension
+        tags:
+            - { name: twig.extension }
