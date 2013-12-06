@@ -14,5 +14,31 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @author TOM
  */
 class SubscriptionInterruption {
-    //put your code here
+    protected $id;
+    protected $od;
+    protected $do;
+    
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getOd() {
+        return $this->od;
+    }
+
+    public function getDo() {
+        return $this->do;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    public function setOd($od) {
+        $this->od = $od;
+    }
+
+    public function setDo($do) {
+        $this->do = $do;
+    }
 }

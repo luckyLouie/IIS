@@ -21,7 +21,16 @@ class Subscription {
     protected $zakaznik;
     protected $titul;
     protected $issn;
+    protected $id;
 
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
+    }
+    
     public function getUzivatel() {
         return $this->uzivatel;
     }

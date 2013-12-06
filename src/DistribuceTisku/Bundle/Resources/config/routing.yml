@@ -115,19 +115,19 @@ _supplierRemove:
         _method: GET|POST
         
 _subscriptionAdd:    
-    pattern:  /subscriptionAdd/{id}
+    pattern:  /subscriptionAdd
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionAdd }
     requirements:   
         _method: GET|POST
 
 _subscriptionEdit:    
-    pattern:  /subscriptionEdit
+    pattern:  /subscriptionEdit/{id}
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionEdit }
     requirements:   
         _method: GET|POST
         
 _subscriptionRemove:    
-    pattern:  /subscriptionAdd
+    pattern:  /subscriptionRemove/{id}
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionRemove }
     requirements:   
         _method: GET|POST 
@@ -144,9 +144,9 @@ _subscriptionList:
     requirements:   
         _method: GET|POST
         
-_subscriptionInteruptionAdd:    
-    pattern:  /subscriptionInteruptionAdd
-    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInteruptionadd }
+_subscriptionInterruption:    
+    pattern:  /subscriptionInterruption/{id}
+    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInterruption }
     requirements:   
         _method: GET|POST
         
@@ -155,21 +155,3 @@ _profile:
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInteruptionadd }
     requirements:   
         _method: GET|POST     
-        
-_subscriptionRemoveById:    
-    pattern:  /subscriptionRemoveById/{id}
-    defaults: { _controller: DistribuceTiskuBundle:Customer:subscriptionRemove }
-    requirements:   
-        _method: GET|POST
-        
-_subscriptionEditById:    
-    pattern:  /subscriptionEditById/{id}
-    defaults: { _controller: DistribuceTiskuBundle:Customer:subscriptionEdit }
-    requirements:   
-        _method: GET|POST
-        
-_subscriptionInterruptById:    
-    pattern:  /subscriptionInterruptById/{id}
-    defaults: { _controller: DistribuceTiskuBundle:Customer:subscriptionInterrup }
-    requirements:   
-        _method: GET|POST

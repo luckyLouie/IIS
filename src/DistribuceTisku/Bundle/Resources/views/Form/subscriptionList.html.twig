@@ -31,9 +31,9 @@
         <td>{{ odber.prijmeni }}</td>
         <td>{{ odber.titul }}</td>
         <td>{{ odber.id_platby }}</td>
-        <td><a href="{{ path('_subscriptionAdd',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/edit.png') }}" alt="změnit odběr" width="20" height="20"></a></td>
-        <td><a href="{{ path('_subscriptionInterruptById',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/interrupt.png') }}" alt="přerušit odběr" width="20" height="20"></a></td>
-        <td><a href="{{ path('_subscriptionRemoveById',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat odběr" width="20" height="20"></a></td>
+        <td><a href="{{ path('_subscriptionEdit',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/edit.png') }}" alt="změnit odběr" width="20" height="20"></a></td>
+        <td><a href="{{ path('_subscriptionInterruption',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/interrupt.png') }}" alt="přerušit odběr" width="20" height="20"></a></td>
+        <td><a href="{{ path('_subscriptionRemove',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat odběr" width="20" height="20"></a></td>
     </tr>    
     {% endfor %}
 </table>

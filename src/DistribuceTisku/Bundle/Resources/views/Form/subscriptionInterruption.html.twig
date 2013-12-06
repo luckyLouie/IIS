@@ -1,0 +1,29 @@
+
+{% extends 'DistribuceTiskuBundle::layout.html.twig' %}
+
+{% block title %}Nastavit přerušení odběru{% endblock%}
+
+
+{% block body %}
+    <header>
+        <h1>Nastavit přerušení odběru</h1>
+    </header>
+
+    {% for flashMessage in app.session.flashbag.get('vlozeni') %}
+    <div class="blogger-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %}
+
+    {% block form %}
+    <form action="{{ path('_subscriptionInterruption',{'id' : form.vars.value.id}) }}" method="post" {{ form_enctype(form) }} class="blogger">
+    {% endblock %}  
+        {{ form_errors(form) }}
+        {{ form_row(form.od) }}
+        {{ form_row(form.do) }}
+    {% block formRest %}
+        {{ form_rest(form) }}
+    {% endblock %} 
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}
