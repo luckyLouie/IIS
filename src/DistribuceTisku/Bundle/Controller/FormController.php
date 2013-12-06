@@ -48,7 +48,6 @@ class FormController extends Controller {
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
 
-                echo "is valid !!";
                 $this->get('session')->getFlashBag()->add('ok', 'Nová tiskovina byla úspěšně vložena');
                 return $this->redirect($this->generateUrl('_bookAdd'));
             }
@@ -63,10 +62,15 @@ class FormController extends Controller {
         $form = $this->createForm(new BookType(), $book);
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
-            $c = $request->get("book");
-
+            $c = $request->get("titul");
             $conn = $this->get('database_connection');
-            //conn->update('zakaznik', $c, array('id_zakaznika' => $id));
+//cena 	titul 	den_vydani 	nakladatelstvi 	vydavatel
+            $sql = "UPDATE `tiskovina` SET cena='" . $c['cena'] . "', den_vydani='" . $c['denVydani'] . "', ";
+            $sql .= "nakladatelstvi='" . $c['nakladatelstvi'] . "', vydavatel='" . $c['vydavatel'] . "' WHERE ISSN='" . $id . "'";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $this->get('session')->getFlashBag()->add('ok', 'Titul byl uspesne upraven.');
+            return $this->redirect($this->generateUrl('_bookList'));
         }
         return $this->render('DistribuceTiskuBundle:Form:bookedit.html.twig', array(
                     'form' => $form->createView()
@@ -83,7 +87,6 @@ class FormController extends Controller {
         $books = $conn->fetchAll('SELECT * FROM tiskovina ORDER BY titul ASC');
         return $this->render('DistribuceTiskuBundle:Form:booklist.html.twig', array('books' => $books));
     }
-
 
     public function supplierAddAction() {
         $supplier = new Supplier();
@@ -123,84 +126,79 @@ class FormController extends Controller {
                     'form' => $form->createView()
         ));
     }
-    
-    public function suplierEditAction()
-    {
-                
+
+    public function suplierEditAction() {
+        
     }
-    
-    function makeSubscriptionForm($subscription)
-    {
+
+    function makeSubscriptionForm($subscription) {
         $conn = $this->get('database_connection');
         $uzivatele = $conn->fetchAll('SELECT `jmeno`, `id_zakaznika` FROM `zakaznik`');
 
-        foreach ($uzivatele as $one){
+        foreach ($uzivatele as $one) {
             $uzivatel[$one['id_zakaznika']] = $one['jmeno'];
         }
-        
+
         $uzivatele = $conn->fetchAll('SELECT `ISSN`, `titul` FROM `tiskovina`');
 
-        foreach ($uzivatele as $one){
+        foreach ($uzivatele as $one) {
             $titul[$one['ISSN']] = $one['titul'];
         }
-        
+
         $form = $this->createFormBuilder($subscription)
-            ->add('uzivatel', 'choice',  array('choices' => $uzivatel))
-            ->add('denOdberu', 'choice',  array('choices' => array(
-                'Neděle' => 'Neděle',
-                'Pondělí' => 'Pondělí',
-                'Úterý' => 'Úterý',
-                'Středa' => 'Středa',
-                'Čtvrtek' => 'Čtvrtek',
-                'Pátek' => 'Pátek',
-                'Sobota' => 'Sobota'
-                )))
-            ->add('odberOd', 'date', array(
-    'input'  => 'timestamp',
-    'widget' => 'choice',
-    'format' => 'yyyy-MM-dd'
-))
-            ->add('odberDo', 'date', array(
-    'input'  => 'timestamp',
-    'widget' => 'choice',
-    'format' => 'yyyy-MM-dd'
-))
-            ->add('titul', 'choice',  array('choices' => $titul))
-            ->getForm();
+                ->add('uzivatel', 'choice', array('choices' => $uzivatel))
+                ->add('denOdberu', 'choice', array('choices' => array(
+                        'Neděle' => 'Neděle',
+                        'Pondělí' => 'Pondělí',
+                        'Úterý' => 'Úterý',
+                        'Středa' => 'Středa',
+                        'Čtvrtek' => 'Čtvrtek',
+                        'Pátek' => 'Pátek',
+                        'Sobota' => 'Sobota'
+            )))
+                ->add('odberOd', 'date', array(
+                    'input' => 'timestamp',
+                    'widget' => 'choice',
+                    'format' => 'yyyy-MM-dd'
+                ))
+                ->add('odberDo', 'date', array(
+                    'input' => 'timestamp',
+                    'widget' => 'choice',
+                    'format' => 'yyyy-MM-dd'
+                ))
+                ->add('titul', 'choice', array('choices' => $titul))
+                ->getForm();
         return $form;
     }
-    
-    public function subscriptionAddAction()
-    {
+
+    public function subscriptionAddAction() {
         $subscription = new Subscription();
         $form = $this->makeSubscriptionForm($subscription);
         $request = $this->getRequest();
-        $form->handleRequest($request);  
-        
-            if ($form->isValid()) {
-                $c = $request->get("form");
-                echo $c['odberOd']['year'];
-                $conn = $this->get('database_connection');
-                $sql = "INSERT INTO `odber` (`den_odberu`, `odber_od`, `odber_do`, `id_zakaznika`, `ISSN`) VALUES ('".$c['denOdberu']."', '".$c['odberOd']['year']."-".$c['odberOd']['month']."-".$c['odberOd']['day']."', '".$c['odberDo']['year']."-".$c['odberDo']['month']."-".$c['odberDo']['day']."', '".$c['uzivatel']."', '".$c['titul']."')";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
+        $form->handleRequest($request);
 
-                echo "is valid !!";
-                $this->get('session')->getFlashBag()->add('vlozeni', 'Nový odběr byl úspěšně vložen');
-                return $this->redirect($this->generateUrl('_subscriptionAdd'));
-                
-            }
-        
+        if ($form->isValid()) {
+            $c = $request->get("form");
+            echo $c['odberOd']['year'];
+            $conn = $this->get('database_connection');
+            $sql = "INSERT INTO `odber` (`den_odberu`, `odber_od`, `odber_do`, `id_zakaznika`, `ISSN`) VALUES ('" . $c['denOdberu'] . "', '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', '" . $c['uzivatel'] . "', '" . $c['titul'] . "')";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+
+            echo "is valid !!";
+            $this->get('session')->getFlashBag()->add('vlozeni', 'Nový odběr byl úspěšně vložen');
+            return $this->redirect($this->generateUrl('_subscriptionAdd'));
+        }
+
         return $this->render('DistribuceTiskuBundle:Form:subscriptionAdd.html.twig', array(
-            'form' => $form->createView()
+                    'form' => $form->createView()
         ));
     }
-    
-    public function subscriptionEditAction($id)
-    {
+
+    public function subscriptionEditAction($id) {
         $subscription = new Subscription();
         $conn = $this->get('database_connection');
-        $sql = "SELECT * FROM `odber` WHERE id_odberu = '".$id."'";
+        $sql = "SELECT * FROM `odber` WHERE id_odberu = '" . $id . "'";
         $odbery = $conn->prepare($sql);
         $odbery->execute();
         foreach ($odbery as $odber) {
@@ -214,56 +212,54 @@ class FormController extends Controller {
         $form = $this->makeSubscriptionForm($subscription);
         $request = $this->getRequest();
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
-                $c = $request->get("form");
-                echo $c['odberOd']['year'];
-                    $sql = "UPDATE `odber` SET `den_odberu` = '".$c['denOdberu']."', `odber_od` = '".$c['odberOd']['year']."-".$c['odberOd']['month']."-".$c['odberOd']['day']."', `odber_do` = '".$c['odberDo']['year']."-".$c['odberDo']['month']."-".$c['odberDo']['day']."', `id_zakaznika` = '".$c['uzivatel']."', `ISSN` = '".$c['titul']."' WHERE `odber`.`id_odberu` = '".$id."'";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->execute();
-                    echo "is valid !!";
-                    $this->get('session')->getFlashBag()->add('vlozeni', 'Editace odběru byla úspěšná');
-                    return $this->redirect($this->generateUrl('_subscriptionList'));
-            }
-            
+            $c = $request->get("form");
+            echo $c['odberOd']['year'];
+            $sql = "UPDATE `odber` SET `den_odberu` = '" . $c['denOdberu'] . "', `odber_od` = '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', `odber_do` = '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', `id_zakaznika` = '" . $c['uzivatel'] . "', `ISSN` = '" . $c['titul'] . "' WHERE `odber`.`id_odberu` = '" . $id . "'";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            echo "is valid !!";
+            $this->get('session')->getFlashBag()->add('vlozeni', 'Editace odběru byla úspěšná');
+            return $this->redirect($this->generateUrl('_subscriptionList'));
+        }
+
         return $this->render('DistribuceTiskuBundle:Form:subscriptionEdit.html.twig', array(
-            'form' => $form->createView()
+                    'form' => $form->createView()
         ));
-    
     }
 
-    public function subscriptionListAction()
-    {
+    public function subscriptionListAction() {
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
-
+            
         }
 
         $conn = $this->get('database_connection');
         $sql = "SELECT `odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
-        $sql = $sql."JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
-        $sql = $sql."JOIN `tiskovina` ON `odber`.`ISSN` = `tiskovina`.`ISSN` ORDER BY `odber`.`id_odberu`";
+        $sql = $sql . "JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
+        $sql = $sql . "JOIN `tiskovina` ON `odber`.`ISSN` = `tiskovina`.`ISSN` ORDER BY `odber`.`id_odberu`";
         $odbery = $conn->prepare($sql);
         $odbery->execute();
         return $this->render('DistribuceTiskuBundle:Form:subscriptionList.html.twig', array('odbery' => $odbery));
     }
-    
-    public function subscriptionInterruptionAction($id){
-        $interuption = new SubscriptionInterruption();        
+
+    public function subscriptionInterruptionAction($id) {
+        $interuption = new SubscriptionInterruption();
         $interuption->setId($id);
         $form = $this->createFormBuilder($interuption)
-            ->add('od', 'date', array(
-                'input'  => 'timestamp',
-                'widget' => 'choice',
-                'format' => 'yyyy-MM-dd'
-            ))
-            ->add('do', 'date', array(
-                'input'  => 'timestamp',
-                'widget' => 'choice',
-                'format' => 'yyyy-MM-dd'
-            ))
-            ->getForm();
-       
+                ->add('od', 'date', array(
+                    'input' => 'timestamp',
+                    'widget' => 'choice',
+                    'format' => 'yyyy-MM-dd'
+                ))
+                ->add('do', 'date', array(
+                    'input' => 'timestamp',
+                    'widget' => 'choice',
+                    'format' => 'yyyy-MM-dd'
+                ))
+                ->getForm();
+
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -272,25 +268,25 @@ class FormController extends Controller {
                 $c = $request->get("interuption");
                 $conn = $this->get('database_connection');
 
-                $sql = "INSERT INTO `preruseni_odberu` (`preruseni_od`, `preruseni_do`) VALUES ('".$c['od']['year']."-".$c['od']['month']."-".$c['od']['day']."', '".$c['do']['year']."-".$c['do']['month']."-".$c['do']['day']."')";
+                $sql = "INSERT INTO `preruseni_odberu` (`preruseni_od`, `preruseni_do`) VALUES ('" . $c['od']['year'] . "-" . $c['od']['month'] . "-" . $c['od']['day'] . "', '" . $c['do']['year'] . "-" . $c['do']['month'] . "-" . $c['do']['day'] . "')";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
-                
+
                 echo "is valid !!";
                 $this->get('session')->getFlashBag()->add('vlozeni', 'Nové přerušení bylo nastaveno');
                 return $this->redirect($this->generateUrl('_subscriptionList'));
             }
         }
         return $this->render('DistribuceTiskuBundle:Form:subscriptionInterruption.html.twig', array(
-            'form' => $form->createView()
+                    'form' => $form->createView()
         ));
     }
-    
-    public function subscriptionRemove($id){
+
+    public function subscriptionRemove($id) {
         $conn = $this->get('database_connection');
         $conn->delete('odber', array('id_odberu' => $id));
         $conn->delete('preruseni_odberu', array('id_odberu' => $id));
         return $this->redirect($this->generateUrl('_subscriptionList'));
     }
- 
+
 }

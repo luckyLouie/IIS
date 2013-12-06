@@ -7,6 +7,18 @@
     <header>
         <h1>Seznam tiskovin</h1>
     </header>
+    {% for flashMessage in app.session.flashbag.get('ok') %}
+    <div class="blogger-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %}
+
+    {% for flashMessage in app.session.flashbag.get('exception') %}
+    <div class="exception-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %} 
+
 <table>
     <thead>
         <th>ISSN</th>
