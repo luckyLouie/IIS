@@ -150,6 +150,18 @@ _subscriptionInterruption:
     requirements:   
         _method: GET|POST
         
+_subscriptionInterruptionList:    
+    pattern:  /subscriptionInterruptionList/{id}
+    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInterruptionList }
+    requirements:   
+        _method: GET|POST
+        
+_subscriptionInteruptionDelete:    
+    pattern:  /subscriptionInteruptionDelete/{id}
+    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInteruptionDelete }
+    requirements:   
+        _method: GET|POST
+        
 _profile:    
     pattern:  /profile
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInteruptionadd }

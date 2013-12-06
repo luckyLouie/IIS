@@ -1,0 +1,24 @@
+
+{% extends 'DistribuceTiskuBundle::layout.html.twig' %}
+
+{% block title %}Seznam přerušení{% endblock%}
+
+{% block body %}
+    <header>
+        <h1>Seznam přerušení</h1>
+    </header>
+<table>
+    <thead>
+        <th>Přerušení od</th>
+        <th>Přerušení do</th>
+        <th>Odstranit</th>
+    </thead>
+    {% for interupt in interuptions %}
+    <tr>
+        <td>{{ interupt.preruseni_od }}</td>
+        <td>{{ interupt.preruseni_do }}</td>
+        <td><a href="{{ path('_subscriptionInteruptionDelete',{'id' : interupt.id_preruseni} )}}"><img src="{{ asset('images/delete.jpg') }}" alt="smazat přerušení" width="20" height="20"></a></td>
+    </tr>    
+    {% endfor %}
+</table>
+{% endblock %}
