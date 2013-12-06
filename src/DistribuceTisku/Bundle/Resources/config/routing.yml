@@ -168,6 +168,12 @@ _usubscriptionList:
     requirements:   
         _method: GET|POST
         
+_usubscriptionEdit:    
+    pattern:  /usubscriptionEdit/{id}
+    defaults: { _controller: DistribuceTiskuBundle:Form:usubscriptionEdit }
+    requirements:   
+        _method: GET|POST
+        
 _subscriptionInterruption:    
     pattern:  /subscriptionInterruption/{id}
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInterruption }

@@ -394,5 +394,39 @@ class FormController extends Controller {
                     'form' => $form->createView()
         ));
     }
+    
+    public function usubscriptionEditAction($id) {
+        $subscription = new Subscription();
+        $conn = $this->get('database_connection');
+        $sql = "SELECT * FROM `odber` WHERE id_odberu = '" . $id . "'";
+        $odbery = $conn->prepare($sql);
+        $odbery->execute();
+        foreach ($odbery as $odber) {
+            $subscription->setUzivatel($odber['id_zakaznika']);
+            $subscription->setDenOdberu($odber['den_odberu']);
+            $subscription->setZakaznik($odber['id_zakaznika']);
+            $subscription->setTitul($odber['ISSN']);
+            $subscription->setIssn($odber['ISSN']);
+            $subscription->setId($id);
+        }
+        $form = $this->makeSubscriptionForm($subscription);
+        $request = $this->getRequest();
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $c = $request->get("form");
+            echo $c['odberOd']['year'];
+            $sql = "UPDATE `odber` SET `den_odberu` = '" . $c['denOdberu'] . "', `odber_od` = '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', `odber_do` = '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', `id_zakaznika` = '" . $c['uzivatel'] . "', `ISSN` = '" . $c['titul'] . "' WHERE `odber`.`id_odberu` = '" . $id . "'";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            echo "is valid !!";
+            $this->get('session')->getFlashBag()->add('vlozeni', 'Editace odběru byla úspěšná');
+            return $this->redirect($this->generateUrl('_usubscriptionList'));
+        }
+
+        return $this->render('DistribuceTiskuBundle:Form:usubscriptionEdit.html.twig', array(
+                    'form' => $form->createView()
+        ));
+    }
 
 }
