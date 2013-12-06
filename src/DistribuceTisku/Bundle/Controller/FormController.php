@@ -2,17 +2,13 @@
 
 namespace DistribuceTisku\Bundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use DistribuceTisku\Bundle\Entity\Customer;
 use DistribuceTisku\Bundle\Entity\Book;
-use DistribuceTisku\Bundle\Entity\Supplier;
 use DistribuceTisku\Bundle\Entity\Subscription;
 use DistribuceTisku\Bundle\Entity\SubscriptionInterruption;
-use DistribuceTisku\Bundle\Form\CustomerType;
+use DistribuceTisku\Bundle\Entity\Supplier;
 use DistribuceTisku\Bundle\Form\BookType;
 use DistribuceTisku\Bundle\Form\SupplierType;
-use DistribuceTisku\Bundle\Form\SubscriptionType;
-use DistribuceTisku\Bundle\Form\SubscriptionInterruptionType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class FormController extends Controller {
 
@@ -173,6 +169,7 @@ class FormController extends Controller {
 
     public function subscriptionAddAction() {
         $subscription = new Subscription();
+        $subscription->setOdberDo(2013);
         $form = $this->makeSubscriptionForm($subscription);
         $request = $this->getRequest();
         $form->handleRequest($request);
@@ -229,14 +226,23 @@ class FormController extends Controller {
         ));
     }
 
-    public function subscriptionListAction()
-    {
+    private function getSubscriptionList($id = "") {
         $conn = $this->get('database_connection');
-        $sql = "SELECT `odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
+        $sql = "SELECT `platby`.`obdobi`,`platby`.`zpusob_platby`,`odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
         $sql = $sql . "JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
-        $sql = $sql . "JOIN `tiskovina` ON `odber`.`ISSN` = `tiskovina`.`ISSN` ORDER BY `odber`.`id_odberu`";
+        $sql = $sql . "JOIN `tiskovina` ON `odber`.`ISSN` = `tiskovina`.`ISSN` ";
+        $sql = $sql . "JOIN `platby` ON `odber`.`id_platby` = `platby`.`id_platby` ";
+        if ($id != "") {
+            $sql = $sql . " WHERE `odber`.`id_zakaznika`=" . $id;
+        }
+        $sql = $sql." ORDER BY `odber`.`id_odberu`";
         $odbery = $conn->prepare($sql);
         $odbery->execute();
+        return $odbery;
+    }
+
+    public function subscriptionListAction() {
+        $odbery = $this->getSubscriptionList();
         return $this->render('DistribuceTiskuBundle:Form:subscriptionList.html.twig', array('odbery' => $odbery));
     }
 
@@ -264,7 +270,7 @@ class FormController extends Controller {
                 $c = $request->get("interuption");
                 $conn = $this->get('database_connection');
 
-                $sql = "INSERT INTO `preruseni_odberu` (`preruseni_od`, `preruseni_do`, `id_odberu`) VALUES ('".$c['od']['year']."-".$c['od']['month']."-".$c['od']['day']."', '".$c['do']['year']."-".$c['do']['month']."-".$c['do']['day']."', '".$id."')";
+                $sql = "INSERT INTO `preruseni_odberu` (`preruseni_od`, `preruseni_do`, `id_odberu`) VALUES ('" . $c['od']['year'] . "-" . $c['od']['month'] . "-" . $c['od']['day'] . "', '" . $c['do']['year'] . "-" . $c['do']['month'] . "-" . $c['do']['day'] . "', '" . $id . "')";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
 
@@ -284,27 +290,65 @@ class FormController extends Controller {
         $conn->delete('preruseni_odberu', array('id_odberu' => $id));
         return $this->redirect($this->generateUrl('_subscriptionList'));
     }
-    
-    public function subscriptionInterruptionListAction($id)
-    {
+
+    public function subscriptionInterruptionListAction( $id) {
         $conn = $this->get('database_connection');
-        $sql = "SELECT `id_preruseni`, `preruseni_od`, `preruseni_do` FROM `preruseni_odberu` WHERE `id_odberu` = '".$id."'";
+        $sql = "SELECT `id_preruseni`, `preruseni_od`, `preruseni_do` FROM `preruseni_odberu` WHERE `id_odberu` = '" . $id . "'";
         $preruseni = $conn->prepare($sql);
         $preruseni->execute();
         return $this->render('DistribuceTiskuBundle:Form:subscriptionInterruptionList.html.twig', array('interuptions' => $preruseni));
     }
-    
-    public function subscriptionInteruptionDeleteAction($id)
-    {
+
+    public function subscriptionInteruptionDeleteAction($id) {
         $conn = $this->get('database_connection');
-        
+
         $conn->delete('preruseni_odberu', array('id_preruseni' => $id));
-        
+
         $sql = "SELECT `id_preruseni`, `preruseni_od`, `preruseni_do` FROM `preruseni_odberu`";
         $preruseni = $conn->prepare($sql);
         $preruseni->execute();
-        
+
         return $this->render('DistribuceTiskuBundle:Form:subscriptionInterruptionList.html.twig', array('interuptions' => $preruseni));
     }
- 
+
+    //******************************************************************************
+    //******************USER********************************************************
+
+    public function ubookListAction() {
+        $conn = $this->get('database_connection');
+        $books = $conn->fetchAll('SELECT * FROM tiskovina ORDER BY titul ASC');
+        return $this->render('DistribuceTiskuBundle:Form:ubooklist.html.twig', array('books' => $books));
+    }
+
+    public function usubscriptionListAction() {
+        $session = $this->getRequest()->getSession();
+        $odbery = $this->getSubscriptionList($session->get('id'));
+        return $this->render('DistribuceTiskuBundle:Form:usubscriptionList.html.twig', array('odbery' => $odbery));
+    }
+
+    public function usubscriptionAddAction() {
+        $subscription = new Subscription();
+        $subscription->setOdberDo(2013);
+        $form = $this->makeSubscriptionForm($subscription);
+        $request = $this->getRequest();
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $c = $request->get("form");
+            echo $c['odberOd']['year'];
+            $conn = $this->get('database_connection');
+            $sql = "INSERT INTO `odber` (`den_odberu`, `odber_od`, `odber_do`, `id_zakaznika`, `ISSN`) VALUES ('" . $c['denOdberu'] . "', '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', '" . $c['uzivatel'] . "', '" . $c['titul'] . "')";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+
+            echo "is valid !!";
+            $this->get('session')->getFlashBag()->add('vlozeni', 'Nový odběr byl úspěšně vložen');
+            return $this->redirect($this->generateUrl('_usubscriptionAdd'));
+        }
+
+        return $this->render('DistribuceTiskuBundle:Form:usubscriptionAdd.html.twig', array(
+                    'form' => $form->createView()
+        ));
+    }
+
 }

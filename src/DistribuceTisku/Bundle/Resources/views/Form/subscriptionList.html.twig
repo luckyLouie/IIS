@@ -10,28 +10,32 @@
 <table>
     <thead>
         <th>id</th>
+        <th>Titul</th>
         <th>Den odběru</th>
         <th>Od</th>
         <th>Do</th>
+        {% block adminOnlyTh %}
         <th>Jméno</th>
         <th>Přijmení</th>
-        <th>Titul</th>
         <th>Platba</th>
+        {% endblock %}
         <th>upravit</th>
         <th>přerušit</th>
-        <th>přerušení</th>
+        <th>Seznam přerušení</th>
         <th>smazat</th>
     </thead>
     {% for odber in odbery %}
-    <tr>
+    <tr>        
         <td>{{ odber.id_odberu }}</td>
+        <td>{{ odber.titul }}</td>
         <td>{{ odber.den_odberu }}</td>
         <td>{{ odber.odber_od }}</td>
         <td>{{ odber.odber_do }}</td>
+        {% block adminOnlyTd %}
         <td>{{ odber.jmeno }}</td>
         <td>{{ odber.prijmeni }}</td>
-        <td>{{ odber.titul }}</td>
         <td>{{ odber.id_platby }}</td>
+        {% endblock %}
         <td><a href="{{ path('_subscriptionEdit',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/edit.png') }}" alt="změnit odběr" width="20" height="20"></a></td>
         <td><a href="{{ path('_subscriptionInterruption',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/interrupt.png') }}" alt="přerušit odběr" width="20" height="20"></a></td>
         <td><a href="{{ path('_subscriptionInterruptionList',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/interrupt.png') }}" alt="přerušit odběr" width="20" height="20"></a></td>

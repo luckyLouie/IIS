@@ -57,7 +57,7 @@
                     <li><a href="{{ path('_supplierEdit')}}">Editovat doručovatele</a></li>
                     <li><a href="{{ path('_supplierRemove')}}">Odebrat doručovatele</a></li>
                     <li><a href="{{ path('_subscriptionAdd')}}">Zadat odběr</a></li>
-                    <li><a href="{{ path('_subscriptionList')}}">Procházet odběry</a></li>
+                    <li><a href="{{ path('_subscriptionList')}}">Prohlížet odběry</a></li>
                     <li><a href="{{ path('_profile')}}">Upravit profil</a></li>
                 </ul>
                 {% elseif app.session.get('type') == "1" %}
@@ -67,10 +67,11 @@
                 </ul>
                 {% elseif app.session.get('type') == "2" %}
                 <ul>
-                    <li><a href="{{ path('_about')}}">Zadat odběr</a></li>
+                    <li><a href="{{ path('_ubookList')}}">Seznam tiskovin</a></li>
+                    <li><a href="{{ path('_usubscriptionAdd')}}">Zadat odběr</a></li>
                     <li><a href="{{ path('_about')}}">Upravit odběr</a></li>
                     <li><a href="{{ path('_about')}}">Odebrat odběr</a></li>
-                    <li><a href="{{ path('_about')}}">Prohlížet odběr</a></li>
+                    <li><a href="{{ path('_usubscriptionList')}}">Prohlížet odběry</a></li>
                     <li><a href="{{ path('_about')}}">Přerušení odběru</a></li>
                     <li><a href="{{ path('_about')}}">Upravit profil</a></li>
                 </ul>

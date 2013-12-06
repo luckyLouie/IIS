@@ -142,7 +142,7 @@ class CustomerController extends Controller {
     }
 
     public function customerEditByNameAction($name) {
-        $customer = $this->getCustomerByName($name);
+        $customer = $this->getCustomerByName($name);        
         $id = customerNameToId($name);
         $form = $this->createForm(new CustomerType(), $customer);
         $request = $this->getRequest();

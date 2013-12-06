@@ -27,17 +27,21 @@
         <th>den vydání</th>
         <th>nakladatelstvi</th>
         <th>vydavatel</th>
+        {% block adminOnlyTh %}
         <th>editovat</th>
+        {% endblock %}
     </thead>
     {% for book in books %}
     <tr>
-        <td><a href="{{ path('_bookEdit',{'id' : book.ISSN} )}}">{{ book.ISSN }}</a></td>
+        <td>{{ book.ISSN }}</td>
         <td>{{ book.cena }}</td>
         <td>{{ book.titul }}</td>
         <td>{{ book.den_vydani }}</td>
         <td>{{ book.nakladatelstvi }}</td>
         <td>{{ book.vydavatel }}</td>
+        {% block adminOnlyTd %}
         <td><a href="{{ path('_bookEdit',{'id' : book.ISSN} )}}"><img src="{{ asset('images/edit.jpg') }}" alt="editovat zakaznika" width="20" height="20"></a></td>
+        {% endblock %}
     </tr>    
     {% endfor %}
 </table>

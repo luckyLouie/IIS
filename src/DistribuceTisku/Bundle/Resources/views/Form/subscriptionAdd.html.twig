@@ -21,15 +21,16 @@
     <form action="{{ path('_subscriptionAdd',{'id' : "add"}) }}" method="post" {{ form_enctype(form) }} class="blogger">
     {% endblock %}
         {{ form_errors(form) }}
-
+        {% block adminOnly %}
         {{ form_row(form.uzivatel) }}
+        {% endblock %}
         {{ form_row(form.titul) }}
         {{ form_row(form.denOdberu) }}
         {{ form_row(form.odberOd) }}
         {{ form_row(form.odberDo) }}
-        
+        {% block formRest %}   
         {{ form_rest(form) }}
-
+        {% endblock %}
         <input type="submit" value="Submit" />
     </form>
 {% endblock %}{# empty Twig template #}

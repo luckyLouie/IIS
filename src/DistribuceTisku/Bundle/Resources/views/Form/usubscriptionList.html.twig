@@ -1,0 +1,16 @@
+
+{% extends 'DistribuceTiskuBundle:Form:subscriptionList.html.twig' %}
+
+        {% block adminOnlyTh %}
+        <th>Obdobi</th>
+        <th>Zpusob platby</th>
+        {% endblock %}
+
+        {% block adminOnlyTd %}
+         <td>{{ odber.obdobi }}</td>
+        <td>{{ odber.zpusob_platby }}</td>
+        {% endblock %}
+
+        {% block formRest %}   
+
+        {% endblock %}
