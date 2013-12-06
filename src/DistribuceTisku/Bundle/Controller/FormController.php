@@ -234,11 +234,6 @@ class FormController extends Controller {
 
     public function subscriptionListAction()
     {
-        $request = $this->getRequest();
-        if ($request->getMethod() == 'POST') {
-
-        }
-
         $conn = $this->get('database_connection');
         $sql = "SELECT `odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
         $sql = $sql."JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
@@ -272,7 +267,7 @@ class FormController extends Controller {
                 $c = $request->get("interuption");
                 $conn = $this->get('database_connection');
 
-                $sql = "INSERT INTO `preruseni_odberu` (`preruseni_od`, `preruseni_do`) VALUES ('".$c['od']['year']."-".$c['od']['month']."-".$c['od']['day']."', '".$c['do']['year']."-".$c['do']['month']."-".$c['do']['day']."')";
+                $sql = "INSERT INTO `preruseni_odberu` (`preruseni_od`, `preruseni_do`, `id_odberu`) VALUES ('".$c['od']['year']."-".$c['od']['month']."-".$c['od']['day']."', '".$c['do']['year']."-".$c['do']['month']."-".$c['do']['day']."', '".$id."')";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
                 
@@ -291,6 +286,28 @@ class FormController extends Controller {
         $conn->delete('odber', array('id_odberu' => $id));
         $conn->delete('preruseni_odberu', array('id_odberu' => $id));
         return $this->redirect($this->generateUrl('_subscriptionList'));
+    }
+    
+    public function subscriptionInterruptionListAction($id)
+    {
+        $conn = $this->get('database_connection');
+        $sql = "SELECT `id_preruseni`, `preruseni_od`, `preruseni_do` FROM `preruseni_odberu` WHERE `id_odberu` = '".$id."'";
+        $preruseni = $conn->prepare($sql);
+        $preruseni->execute();
+        return $this->render('DistribuceTiskuBundle:Form:subscriptionInterruptionList.html.twig', array('interuptions' => $preruseni));
+    }
+    
+    public function subscriptionInteruptionDeleteAction($id)
+    {
+        $conn = $this->get('database_connection');
+        
+        $conn->delete('preruseni_odberu', array('id_preruseni' => $id));
+        
+        $sql = "SELECT `id_preruseni`, `preruseni_od`, `preruseni_do` FROM `preruseni_odberu`";
+        $preruseni = $conn->prepare($sql);
+        $preruseni->execute();
+        
+        return $this->render('DistribuceTiskuBundle:Form:subscriptionInterruptionList.html.twig', array('interuptions' => $preruseni));
     }
  
 }

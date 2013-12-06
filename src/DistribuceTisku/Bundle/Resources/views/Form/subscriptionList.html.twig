@@ -19,6 +19,7 @@
         <th>Platba</th>
         <th>upravit</th>
         <th>přerušit</th>
+        <th>přerušení</th>
         <th>smazat</th>
     </thead>
     {% for odber in odbery %}
@@ -33,6 +34,7 @@
         <td>{{ odber.id_platby }}</td>
         <td><a href="{{ path('_subscriptionEdit',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/edit.png') }}" alt="změnit odběr" width="20" height="20"></a></td>
         <td><a href="{{ path('_subscriptionInterruption',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/interrupt.png') }}" alt="přerušit odběr" width="20" height="20"></a></td>
+        <td><a href="{{ path('_subscriptionInterruptionList',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/interrupt.png') }}" alt="přerušit odběr" width="20" height="20"></a></td>
         <td><a href="{{ path('_subscriptionRemove',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat odběr" width="20" height="20"></a></td>
     </tr>    
     {% endfor %}
