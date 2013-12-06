@@ -1,0 +1,11 @@
+{% extends 'DistribuceTiskuBundle:Form:supplierAdd.html.twig' %}
+
+
+    {% block form %}
+<form action="{{ path('_supplierEdit', {'id':  form.vars.value.id  })}}" method="post" {{ form_enctype(form) }} class="blogger">
+    {% endblock %}   
+
+
+{% block rest_fort %}
+
+{% endblock %}

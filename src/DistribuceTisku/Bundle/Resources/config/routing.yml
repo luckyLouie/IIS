@@ -103,14 +103,20 @@ _supplierAdd:
         _method: GET|POST
 
 _supplierEdit:    
-    pattern:  /supplierEdit
+    pattern:  /supplierEdit/{id}
     defaults: { _controller: DistribuceTiskuBundle:Form:supplierEdit }
     requirements:   
         _method: GET|POST
 
-_supplierRemove:    
-    pattern:  /supplierRemove
-    defaults: { _controller: DistribuceTiskuBundle:Form:supplierRemove }
+_supplierDelete:    
+    pattern:  /supplierDelete/{id}
+    defaults: { _controller: DistribuceTiskuBundle:Form:supplierDelete }
+    requirements:   
+        _method: GET|POST
+
+_supplierList:    
+    pattern:  /supplierList
+    defaults: { _controller: DistribuceTiskuBundle:Form:supplierList }
     requirements:   
         _method: GET|POST
         

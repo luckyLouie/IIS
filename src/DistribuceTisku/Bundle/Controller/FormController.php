@@ -124,9 +124,52 @@ class FormController extends Controller {
         ));
     }
     
-    public function suplierEditAction()
+    public function supplierEditAction($id)
+    {        
+        $suplier = new Supplier();
+        $conn = $this->get('database_connection');
+        $sql = "SELECT * FROM `dodavatel` WHERE id_dodavatele = '" . $id . "'";
+        $dodavatele = $conn->prepare($sql);
+        $dodavatele->execute();
+        foreach ($dodavatele as $dodavatel) {
+            $suplier->setJmeno($dodavatel['jmeno']);
+            $suplier->setPrijmeni($dodavatel['prijmeni']);
+            $suplier->setAdresa($dodavatel['adresa']);
+            $suplier->setPsc($dodavatel['psc']);
+            $suplier->setTelefon($dodavatel['kontaktni_udaj']);
+            $suplier->setId($id);
+        }
+        $form = $this->createForm(new SupplierType(), $suplier);
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            $c = $request->get("supplier");
+            $sql = "UPDATE `dodavatel` SET `jmeno` = '".$c['jmeno']."', `prijmeni` = '".$c['prijmeni']."', `adresa` = '".$c['adresa']."', `psc` = '".$c['psc']."', `kontaktni_udaj` = '".$c['telefon']."' WHERE `id_dodavatele` = '".$id."'";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            echo "is valid !!";
+            $this->get('session')->getFlashBag()->add('vlozeni', 'Editace dodavatele byla úspěšná');
+            return $this->redirect($this->generateUrl('_supplierList'));
+        }
+            
+        return $this->render('DistribuceTiskuBundle:Form:supplierEdit.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+    
+    public function supplierListAction()
     {
-                
+        $conn = $this->get('database_connection');
+        $sql = "SELECT * FROM `dodavatel`";
+        $dodavatel = $conn->prepare($sql);
+        $dodavatel->execute();
+        return $this->render('DistribuceTiskuBundle:Form:supplierList.html.twig', array('dodavatele' => $dodavatel));
+    }
+    
+    public function supplierDeleteAction($id)
+    {
+        $conn = $this->get('database_connection');
+        $conn->delete('dodavatel', array('id_dodavatele' => $id));
+        return $this->redirect($this->generateUrl('_supplierList'));
     }
     
     function makeSubscriptionForm($subscription)
@@ -281,7 +324,7 @@ class FormController extends Controller {
         ));
     }
     
-    public function subscriptionRemove($id){
+    public function subscriptionRemoveAction($id){
         $conn = $this->get('database_connection');
         $conn->delete('odber', array('id_odberu' => $id));
         $conn->delete('preruseni_odberu', array('id_odberu' => $id));

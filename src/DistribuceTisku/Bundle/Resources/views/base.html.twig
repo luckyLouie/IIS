@@ -25,7 +25,7 @@
                                 <li><a href="{{ path('_homepage')}}">Home</a></li>
                                 <li><a href="{{ path('_about')}}">About</a></li>
                                 <li><a href="{{ path('_contact')}}">Contact</a></li>
-                                <li><a href="{{ path('_seznamTiskovin')}}">Tiskoviny</a></li>
+                                <li><a href="{{ path('_bookList')}}">Tiskoviny</a></li>
                                 {% if app.session.get('user') != "" %}  
                                 <li><a href="{{ path('_logout')}}">Log out</a></li>
                                 {% else %}
@@ -54,8 +54,7 @@
                     <li><a href="{{ path('_bookAdd')}}">Přidat tiskovinu</a></li>
                     <li><a href="{{ path('_bookList')}}">Seznam tiskovin</a></li>
                     <li><a href="{{ path('_supplierAdd')}}">Přidat doručovatele</a></li>
-                    <li><a href="{{ path('_supplierEdit')}}">Editovat doručovatele</a></li>
-                    <li><a href="{{ path('_supplierRemove')}}">Odebrat doručovatele</a></li>
+                    <li><a href="{{ path('_supplierList')}}">Prohlížet doručovatele</a></li>
                     <li><a href="{{ path('_subscriptionAdd')}}">Zadat odběr</a></li>
                     <li><a href="{{ path('_subscriptionList')}}">Procházet odběry</a></li>
                     <li><a href="{{ path('_profile')}}">Upravit profil</a></li>

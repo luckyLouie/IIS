@@ -14,8 +14,9 @@
     {{ flashMessage }}
     </div>
     {% endfor %}
-
+{% block form %}
     <form action="{{ path('_supplierAdd') }}" method="post" {{ form_enctype(form) }} class="blogger">
+{% endblock %} 
         {{ form_errors(form) }}
 
         {{ form_row(form.jmeno) }}
@@ -23,9 +24,9 @@
         {{ form_row(form.adresa) }}
         {{ form_row(form.psc) }}
         {{ form_row(form.telefon) }}
-
+{% block rest_fort %}
         {{ form_rest(form) }}
-
+{% endblock %}
         <input type="submit" value="Submit" />
     </form>
 {% endblock %}{# empty Twig template #}

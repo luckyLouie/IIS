@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Supplier {
     
+    protected $id;
     protected $login;
     protected $password;
     protected $jmeno;
@@ -22,6 +23,14 @@ class Supplier {
     protected $psc;
     protected $telefon;
 
+    public function getId() {
+        return $this->id;
+    }
+    
+    public function setId($id) {
+        $this->id = $id;
+    }
+        
     public function getLogin() {
         return $this->login;
     }
