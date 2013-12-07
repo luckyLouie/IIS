@@ -6,20 +6,33 @@
 
 {% block body %}
     
+    {% for flashMessage in app.session.flashbag.get('ok') %}
+    <div class="blogger-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %}
+
+    {% for flashMessage in app.session.flashbag.get('exception') %}
+    <div class="exception-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %}  
+
+{% block headerBox %}
     <header>
-        <h1>Log in account</h1>
+        <h1>Přihlášení na účet</h1>
     </header>
-    
-    <p>Fill your username and password to login</p>
+    <p>Vyplňte svoje uživatelské jméno a heslo</p>
+    {% endblock %}
     
     <form action="{{ path('_login_check') }}" method="post">
-        <label for="username">Username:</label>
+        <label for="username">Login:</label>
         <input type="text" id="username" name="_username" />
         <br />
-        <label for="password">Password:</label>
+        <label for="password">Heslo:</label>
         <input type="password" id="password" name="_password" />
         <br />
-        <button type="submit">login</button>
+        <button type="submit">příhlásit</button>
     </form>
     
     

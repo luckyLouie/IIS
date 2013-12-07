@@ -119,7 +119,6 @@ class FormController extends UpperController {
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
 
-                echo "is valid !!";
                 $this->get('session')->getFlashBag()->add('ok', 'Nový dodavatel byl úspěšně vložen');
                 return $this->redirect($this->generateUrl('_supplierAdd'));
             }
@@ -151,7 +150,7 @@ class FormController extends UpperController {
             $sql = "UPDATE `dodavatel` SET `jmeno` = '" . $c['jmeno'] . "', `prijmeni` = '" . $c['prijmeni'] . "', `adresa` = '" . $c['adresa'] . "', `psc` = '" . $c['psc'] . "', `kontaktni_udaj` = '" . $c['telefon'] . "' WHERE `id_dodavatele` = '" . $id . "'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
-            echo "is valid !!";
+
             $this->get('session')->getFlashBag()->add('ok', 'Editace dodavatele byla úspěšná');
             return $this->redirect($this->generateUrl('_supplierList'));
         }
@@ -234,7 +233,6 @@ class FormController extends UpperController {
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
-            echo "is valid !!";
             $this->get('session')->getFlashBag()->add('ok', 'Nový odběr byl úspěšně vložen');
             return $this->redirect($this->generateUrl('_subscriptionAdd'));
         }
@@ -268,7 +266,7 @@ class FormController extends UpperController {
             $sql = "UPDATE `odber` SET `den_odberu` = '" . $c['denOdberu'] . "', `odber_od` = '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', `odber_do` = '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', `id_zakaznika` = '" . $c['uzivatel'] . "', `ISSN` = '" . $c['titul'] . "' WHERE `odber`.`id_odberu` = '" . $id . "'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
-            echo "is valid !!";
+
             $this->get('session')->getFlashBag()->add('ok', 'Editace odběru byla úspěšná');
             return $this->redirect($this->generateUrl('_subscriptionList'));
         }
@@ -391,6 +389,8 @@ class FormController extends UpperController {
 
     public function usubscriptionAddAction() {
         if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
+         $user = $this->getRequest()->getSession()->get("user");
+        $id = $this->customerNameToId($user);
         $subscription = new Subscription();
         $subscription->setOdberDo(2013);
         $form = $this->makeSubscriptionForm($subscription);
@@ -400,7 +400,7 @@ class FormController extends UpperController {
         if ($form->isValid()) {
             $c = $request->get("form");
             $conn = $this->get('database_connection');
-            $sql = "INSERT INTO `odber` (`den_odberu`, `odber_od`, `odber_do`, `id_zakaznika`, `ISSN`) VALUES ('" . $c['denOdberu'] . "', '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', '" . $c['uzivatel'] . "', '" . $c['titul'] . "')";
+            $sql = "INSERT INTO `odber` (`den_odberu`, `odber_od`, `odber_do`, `id_zakaznika`, `ISSN`) VALUES ('" . $c['denOdberu'] . "', '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', '" . $id. "', '" . $c['titul'] . "')";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
@@ -434,7 +434,6 @@ class FormController extends UpperController {
 
         if ($form->isValid()) {
             $c = $request->get("form");
-            echo $c['odberOd']['year'];
             $sql = "UPDATE `odber` SET `den_odberu` = '" . $c['denOdberu'] . "', `odber_od` = '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', `odber_do` = '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', `ISSN` = '" . $c['titul'] . "' WHERE `odber`.`id_odberu` = '" . $id . "'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();

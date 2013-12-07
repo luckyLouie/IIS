@@ -21,4 +21,13 @@ class UpperController extends Controller  {
         //return "";
     }
     
+    function customerNameToId($name) {
+        $conn = $this->get('database_connection');
+        $sql = "SELECT * FROM zakaznik z JOIN users u ON z.id_zakaznika=u.person_id  WHERE u.user_id='" . $name . "';";
+        $users = $conn->fetchAll($sql);
+        foreach ($users as $user) {
+            return $user['id_zakaznika'];
+        }
+    }
+    
 }

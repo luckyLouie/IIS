@@ -1,6 +1,8 @@
 
 {% extends 'DistribuceTiskuBundle:Form:subscriptionAdd.html.twig' %}
-
+    {% block form %}
+    <form action="{{ path('_usubscriptionAdd') }}" method="post" {{ form_enctype(form) }} class="blogger">
+    {% endblock %}
         {% block adminOnly %}
        
         {% endblock %}

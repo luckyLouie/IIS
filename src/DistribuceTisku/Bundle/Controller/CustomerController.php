@@ -44,15 +44,6 @@ class CustomerController extends UpperController {
         }
     }
 
-    function customerNameToId($name) {
-        $conn = $this->get('database_connection');
-        $sql = "SELECT * FROM zakaznik z JOIN users u ON z.id_zakaznika=u.person_id  WHERE u.user_id='" . $name . "';";
-        $users = $conn->fetchAll($sql);
-        foreach ($users as $user) {
-            return $user['id_zakaznika'];
-        }
-    }
-
     public function customerAddAction() {
         if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $customer = new Customer();
@@ -87,9 +78,9 @@ class CustomerController extends UpperController {
                     $this->get('session')->getFlashBag()->add('ok', 'Nový zákazník byl úspěšně vložen');
                     return $this->redirect($this->generateUrl('_customerAdd'));
                 }catch(\Exception $e){
-
                     $this->get('session')->getFlashBag()->add('exception', 'Vyskytla se chyba pri vytvareni noveho zakaznika.');
-                    return $this->redirect($this->generateUrl('_customerAdd'));
+                    return $this->render('DistribuceTiskuBundle:Form:customeradd.html.twig', array(
+            'form' => $form->createView() ));
                 }
             }
         }
@@ -98,7 +89,7 @@ class CustomerController extends UpperController {
         ));
     }
 
-    // pouziva se to?? 
+    // pouziva se to?? NOPE
     public function customerEditAction() {
         if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $user = $this->getRequest()->getSession()->get("user");
@@ -190,4 +181,32 @@ class CustomerController extends UpperController {
         ;
     }
 
+    public function profileAction() {
+       if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
+        $user = $this->getRequest()->getSession()->get("user");
+        $customer = $this->getCustomerByName($user);
+        //$customer->setLogin("login");
+
+        $form = $this->createForm(new CustomerType(), $customer);
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            $c = $request->get("customer");
+
+            $conn = $this->get('database_connection');
+            $sql = "UPDATE `zakaznik` SET jmeno='" . $c['jmeno'] . "', prijmeni='" . $c['prijmeni'] . "', adresa='" . $c['adresa'] . "', titul='" . $c['titul'] . "', ";
+            $sql .= "psc='" . $c['psc'] . "', bankovni_spojeni='" . $c['bankovniSpojeni'] . "', kontaktni_udaj='" . $c['telefon'] . "' WHERE id_zakaznika=" . $id;
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+
+            //nacteni nejnovejsich dat o uzivateli
+            $customer = $this->getCustomerById($id);
+            $form = $this->createForm(new CustomerType(), $customer);
+            $this->get('session')->getFlashBag()->add('ok', 'Editace profilu byla úspěšná');
+            return $this->render('DistribuceTiskuBundle:Form:customeredit.html.twig', array(
+            'form' => $form->createView()));
+        }
+        return $this->render('DistribuceTiskuBundle:Form:customeredit.html.twig', array(
+                    'form' => $form->createView()
+        ));  
+    }
 }

@@ -194,6 +194,6 @@ _subscriptionInteruptionDelete:
         
 _profile:    
     pattern:  /profile
-    defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInteruptionadd }
+    defaults: { _controller: DistribuceTiskuBundle:Customer:profile }
     requirements:   
         _method: GET|POST     

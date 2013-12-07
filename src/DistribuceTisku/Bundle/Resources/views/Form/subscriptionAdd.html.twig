@@ -11,16 +11,23 @@
     </header>
 {% endblock %}
 
-    {% for flashMessage in app.session.flashbag.get('vlozeni') %}
+    {% for flashMessage in app.session.flashbag.get('ok') %}
     <div class="blogger-notice">
     {{ flashMessage }}
     </div>
     {% endfor %}
 
+    {% for flashMessage in app.session.flashbag.get('exception') %}
+    <div class="exception-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %} 
+
     {% block form %}
-    <form action="{{ path('_subscriptionAdd',{'id' : "add"}) }}" method="post" {{ form_enctype(form) }} class="blogger">
+    <form action="{{ path('_subscriptionAdd') }}" method="post" {{ form_enctype(form) }} class="blogger">
     {% endblock %}
         {{ form_errors(form) }}
+        {{ form_row (form._token) }}
         {% block adminOnly %}
         {{ form_row(form.uzivatel) }}
         {% endblock %}

@@ -1,13 +1,9 @@
 {# empty Twig template #}
 
-{% extends 'DistribuceTiskuBundle::layout.html.twig' %}
+{% extends 'DistribuceTiskuBundle:Security:login.html.twig' %}
 
-{% block title %}Log out{% endblock%}    
+{% block title %}Odhlaseni{% endblock%}    
 
 {% block body %}
-    <header>
-        <h1>Log out</h1>
-    </header>
-    
-    <p>You were logged out.</p>
+        {{parent()}}
 {% endblock %}

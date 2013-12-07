@@ -39,8 +39,10 @@ class SecurityController extends Controller
             $session->set('id', $id);
             $session->set('timeCreated', time());
             $session->set('expire', 3600);
+             $this->get('session')->getFlashBag()->add('ok', 'Přihlášení proběhlo úspěšně');
             return $this->render('DistribuceTiskuBundle:Page:index.html.twig');
         }else{
+            $this->get('session')->getFlashBag()->add('exception', 'Špatné uživatelské jméno nebo heslo');
             return $this->render('DistribuceTiskuBundle:Security:login.html.twig');
         }
     }
@@ -49,6 +51,7 @@ class SecurityController extends Controller
     {
         $session = $this->getRequest()->getSession();
         $session->clear();
+        $this->get('session')->getFlashBag()->add('ok', 'Odhlášení proběhlo úspěšně');
         return$this->render('DistribuceTiskuBundle:Security:logout.html.twig');
     }
 }
