@@ -8,11 +8,20 @@ use DistribuceTisku\Bundle\Entity\SubscriptionInterruption;
 use DistribuceTisku\Bundle\Entity\Supplier;
 use DistribuceTisku\Bundle\Form\BookType;
 use DistribuceTisku\Bundle\Form\SupplierType;
+use DistribuceTisku\Bundle\Controller\SecurityController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class FormController extends Controller {
+    
+    function securityExpire(){
+        
+        $pom = new SecurityController;
+        return $pom->timeCheck();
+        
+    }
 
     function getBookByISSN($id) {
+        
         $b = new Book();
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM tiskovina WHERE ISSN='" . $id . "';";
@@ -29,6 +38,7 @@ class FormController extends Controller {
     }
 
     public function bookAddAction() {
+        
         $book = new Book();
         $form = $this->createForm(new BookType(), $book);
 
@@ -270,7 +280,7 @@ class FormController extends Controller {
         ));
     }
 
-    private function getSubscriptionList($id = "") {
+    private function getSubscriptionListAction($id = "") {
         $conn = $this->get('database_connection');
         $sql = "SELECT `platby`.`obdobi`,`platby`.`zpusob_platby`,`odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
         $sql = $sql . "JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
