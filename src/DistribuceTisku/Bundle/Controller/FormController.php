@@ -231,6 +231,7 @@ class FormController extends UpperController {
             $c = $request->get("form");
             $conn = $this->get('database_connection');
             $sql = "INSERT INTO `odber` (`den_odberu`, `odber_od`, `odber_do`, `id_zakaznika`, `ISSN`) VALUES ('" . $c['denOdberu'] . "', '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', '" . $c['uzivatel'] . "', '" . $c['titul'] . "')";
+            //echo $sql;
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
@@ -281,11 +282,15 @@ class FormController extends UpperController {
     private function getSubscriptionList($id = "") {
         if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
-        $sql = "SELECT `platby`.`obdobi`,`platby`.`zpusob_platby`,`odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
+        if ($id != "") {
+            $sql = "SELECT `platby`.`obdobi`,`platby`.`zpusob_platby`,`odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
+        }else{
+            $sql = "SELECT `odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
+        }
         $sql = $sql . "JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
         $sql = $sql . "JOIN `tiskovina` ON `odber`.`ISSN` = `tiskovina`.`ISSN` ";
-        $sql = $sql . "JOIN `platby` ON `odber`.`id_platby` = `platby`.`id_platby` ";
         if ($id != "") {
+            $sql = $sql . "JOIN `platby` ON `odber`.`id_platby` = `platby`.`id_platby` ";
             $sql = $sql . " WHERE `odber`.`id_zakaznika`=" . $id;
         }
         $sql = $sql . " ORDER BY `odber`.`id_odberu`";
@@ -322,9 +327,8 @@ class FormController extends UpperController {
             $form->bind($request);
 
             if ($form->isValid()) {
-                $c = $request->get("interuption");
+                $c = $request->get("form");
                 $conn = $this->get('database_connection');
-
                 $sql = "INSERT INTO `preruseni_odberu` (`preruseni_od`, `preruseni_do`, `id_odberu`) VALUES ('" . $c['od']['year'] . "-" . $c['od']['month'] . "-" . $c['od']['day'] . "', '" . $c['do']['year'] . "-" . $c['do']['month'] . "-" . $c['do']['day'] . "', '" . $id . "')";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
