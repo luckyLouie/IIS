@@ -38,7 +38,7 @@ class PageController extends Controller
                 $this->get('mailer')->send($message);
                 */
                 echo "is valid !!";
-                $this->get('session')->getFlashBag()->add('blogger-notice', 'Your contact enquiry was successfully sent. Thank you!');
+                $this->get('session')->getFlashBag()->add('ok-notice', 'Your contact enquiry was successfully sent. Thank you!');
                 // Redirect - This is important to prevent users re-posting
                 // the form if they refresh the page
                 return $this->redirect($this->generateUrl('_contact'));
