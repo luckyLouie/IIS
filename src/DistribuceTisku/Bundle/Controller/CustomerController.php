@@ -6,7 +6,7 @@ use DistribuceTisku\Bundle\Entity\Customer;
 use DistribuceTisku\Bundle\Form\CustomerType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class CustomerController extends Controller {
+class CustomerController extends UpperController {
 
     function getCustomerByName($name) {
         $customer = new Customer();
@@ -54,6 +54,7 @@ class CustomerController extends Controller {
     }
 
     public function customerAddAction() {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $customer = new Customer();
         $form = $this->createForm(new CustomerType(), $customer);
         $conn = $this->get('database_connection');
@@ -99,6 +100,7 @@ class CustomerController extends Controller {
 
     // pouziva se to?? 
     public function customerEditAction() {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $user = $this->getRequest()->getSession()->get("user");
         $customer = $this->getCustomerByName($user);
         //$customer->setLogin("login");
@@ -118,6 +120,7 @@ class CustomerController extends Controller {
     }
 
     public function customerEditByIdAction($id) {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $customer = $this->getCustomerById($id);
         $form = $this->createForm(new CustomerType(), $customer);
         $request = $this->getRequest();
@@ -142,6 +145,7 @@ class CustomerController extends Controller {
     }
 
     public function customerEditByNameAction($name) {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $customer = $this->getCustomerByName($name);        
         $id = customerNameToId($name);
         $form = $this->createForm(new CustomerType(), $customer);
@@ -161,6 +165,7 @@ class CustomerController extends Controller {
     }
 
     public function customerListAction() {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             
@@ -171,6 +176,7 @@ class CustomerController extends Controller {
     }
 
     public function customerRemoveByIdAction($id) {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         $conn->delete('zakaznik', array('id_zakaznika' => $id));
         return $this->redirect($this->generateUrl('_customerList'));
@@ -178,6 +184,7 @@ class CustomerController extends Controller {
 
     // pouziva se to?
     public function customerRemoveAction() {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         return $this->redirect($this->generateUrl('_customerList'));
         ;
