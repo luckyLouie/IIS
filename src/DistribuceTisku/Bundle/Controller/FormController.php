@@ -11,16 +11,10 @@ use DistribuceTisku\Bundle\Form\SupplierType;
 use DistribuceTisku\Bundle\Controller\SecurityController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class FormController extends Controller {
+class FormController extends UpperController {
 
-    function securityExpire() {
-
-        $pom = new SecurityController;
-        return $pom->timeCheck();
-    }
-
-    function getBookByISSN($id) {
-
+    public function getBookByISSN($id) {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $b = new Book();
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM tiskovina WHERE ISSN='" . $id . "';";
@@ -37,7 +31,7 @@ class FormController extends Controller {
     }
 
     public function bookAddAction() {
-
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $book = new Book();
         $form = $this->createForm(new BookType(), $book);
 
@@ -63,6 +57,7 @@ class FormController extends Controller {
     }
 
     public function bookEditAction($id) {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $book = $this->getBookByISSN($id);
         $form = $this->createForm(new BookType(), $book);
         $request = $this->getRequest();
@@ -83,6 +78,7 @@ class FormController extends Controller {
     }
 
     public function bookListAction() {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             
@@ -94,6 +90,7 @@ class FormController extends Controller {
     }
 
     public function supplierAddAction() {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $supplier = new Supplier();
         $form = $this->createForm(new SupplierType(), $supplier);
 
@@ -132,7 +129,8 @@ class FormController extends Controller {
         ));
     }
 
-    public function supplierEditAction($id) {
+    public function supplierEditAction($id)      
+    {        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $suplier = new Supplier();
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM `dodavatel` WHERE id_dodavatele = '" . $id . "'";
@@ -163,7 +161,9 @@ class FormController extends Controller {
         ));
     }
 
-    public function supplierListAction() {
+    public function supplierListAction()
+    {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM `dodavatel`";
         $dodavatel = $conn->prepare($sql);
@@ -171,7 +171,9 @@ class FormController extends Controller {
         return $this->render('DistribuceTiskuBundle:Form:supplierList.html.twig', array('dodavatele' => $dodavatel));
     }
 
-    public function supplierDeleteAction($id) {
+    public function supplierDeleteAction($id)
+    {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         $conn->delete('dodavatel', array('id_dodavatele' => $id));
         return $this->redirect($this->generateUrl('_supplierList'));
@@ -218,6 +220,7 @@ class FormController extends Controller {
     }
 
     public function subscriptionAddAction() {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $subscription = new Subscription();
         $subscription->setOdberDo(2013);
         $form = $this->makeSubscriptionForm($subscription);
@@ -226,7 +229,6 @@ class FormController extends Controller {
 
         if ($form->isValid()) {
             $c = $request->get("form");
-            echo $c['odberOd']['year'];
             $conn = $this->get('database_connection');
             $sql = "INSERT INTO `odber` (`den_odberu`, `odber_od`, `odber_do`, `id_zakaznika`, `ISSN`) VALUES ('" . $c['denOdberu'] . "', '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', '" . $c['uzivatel'] . "', '" . $c['titul'] . "')";
             $stmt = $conn->prepare($sql);
@@ -243,6 +245,7 @@ class FormController extends Controller {
     }
 
     public function subscriptionEditAction($id) {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $subscription = new Subscription();
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM `odber` WHERE id_odberu = '" . $id . "'";
@@ -262,7 +265,6 @@ class FormController extends Controller {
 
         if ($form->isValid()) {
             $c = $request->get("form");
-            echo $c['odberOd']['year'];
             $sql = "UPDATE `odber` SET `den_odberu` = '" . $c['denOdberu'] . "', `odber_od` = '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', `odber_do` = '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', `id_zakaznika` = '" . $c['uzivatel'] . "', `ISSN` = '" . $c['titul'] . "' WHERE `odber`.`id_odberu` = '" . $id . "'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
@@ -277,6 +279,7 @@ class FormController extends Controller {
     }
 
     private function getSubscriptionList($id = "") {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         $sql = "SELECT `platby`.`obdobi`,`platby`.`zpusob_platby`,`odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
         $sql = $sql . "JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
@@ -292,11 +295,13 @@ class FormController extends Controller {
     }
 
     public function subscriptionListAction() {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $odbery = $this->getSubscriptionList();
         return $this->render('DistribuceTiskuBundle:Form:subscriptionList.html.twig', array('odbery' => $odbery));
     }
 
     public function subscriptionInterruptionAction($id) {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $interuption = new SubscriptionInterruption();
         $interuption->setId($id);
         $form = $this->createFormBuilder($interuption)
@@ -337,14 +342,16 @@ class FormController extends Controller {
         ));
     }
 
-    public function subscriptionRemoveAction($id) {
+    public function subscriptionRemoveAction($id){
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         $conn->delete('odber', array('id_odberu' => $id));
         $conn->delete('preruseni_odberu', array('id_odberu' => $id));
         return $this->redirect($this->generateUrl('_subscriptionList'));
     }
 
-    public function subscriptionInterruptionListAction($id) {
+    public function subscriptionInterruptionListAction( $id) {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         $sql = "SELECT `id_preruseni`, `preruseni_od`, `preruseni_do` FROM `preruseni_odberu` WHERE `id_odberu` = '" . $id . "'";
         $preruseni = $conn->prepare($sql);
@@ -353,6 +360,7 @@ class FormController extends Controller {
     }
 
     public function subscriptionInteruptionDeleteAction($id) {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
 
         $conn->delete('preruseni_odberu', array('id_preruseni' => $id));
@@ -368,18 +376,21 @@ class FormController extends Controller {
     //******************USER********************************************************
 
     public function ubookListAction() {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         $books = $conn->fetchAll('SELECT * FROM tiskovina ORDER BY titul ASC');
         return $this->render('DistribuceTiskuBundle:Form:ubooklist.html.twig', array('books' => $books));
     }
 
     public function usubscriptionListAction() {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $session = $this->getRequest()->getSession();
         $odbery = $this->getSubscriptionList($session->get('id'));
         return $this->render('DistribuceTiskuBundle:Form:usubscriptionList.html.twig', array('odbery' => $odbery));
     }
 
     public function usubscriptionAddAction() {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $subscription = new Subscription();
         $subscription->setOdberDo(2013);
         $form = $this->makeSubscriptionForm($subscription);
@@ -388,7 +399,6 @@ class FormController extends Controller {
 
         if ($form->isValid()) {
             $c = $request->get("form");
-            echo $c['odberOd']['year'];
             $conn = $this->get('database_connection');
             $sql = "INSERT INTO `odber` (`den_odberu`, `odber_od`, `odber_do`, `id_zakaznika`, `ISSN`) VALUES ('" . $c['denOdberu'] . "', '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', '" . $c['uzivatel'] . "', '" . $c['titul'] . "')";
             $stmt = $conn->prepare($sql);
@@ -404,6 +414,7 @@ class FormController extends Controller {
     }
 
     public function usubscriptionEditAction($id) {
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $subscription = new Subscription();
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM `odber` WHERE id_odberu = '" . $id . "'";
