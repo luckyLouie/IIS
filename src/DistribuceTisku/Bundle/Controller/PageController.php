@@ -10,20 +10,20 @@ class PageController extends UpperController
 {
     public function indexAction()
     {
-        if(($pom = $this->timeCheck()) != "") {echo $pom;return $this->render($pom);}
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         return $this->render('DistribuceTiskuBundle:Page:index.html.twig');
     }
 
     public function aboutAction()
     {
-        if(($pom = $this->timeCheck()) != "") {echo $pom;return $this->render($pom);}
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         print($this->getUser());
         return $this->render('DistribuceTiskuBundle:Page:about.html.twig');
     }
     
     public function contactAction()
     {
-        if(($pom = $this->timeCheck()) != "") {echo $pom;return $this->render($pom);}
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $enquiry = new Enquiry();
         $form = $this->createForm(new EnquiryType(), $enquiry);
 
@@ -54,7 +54,7 @@ class PageController extends UpperController
     
     public function seznamTiskovinAction()
     {
-        if(($pom = $this->timeCheck()) != "") {echo $pom;return $this->render($pom);}
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         $tiskoviny = $conn->fetchAll('SELECT * FROM tiskovina');
         $name = "";

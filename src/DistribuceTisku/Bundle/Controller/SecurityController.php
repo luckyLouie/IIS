@@ -27,7 +27,6 @@ class SecurityController extends Controller
         $stmt->execute();
         
         foreach($stmt as $one){
-            echo $one["type"];
             $type = $one["type"];
             $id = $one["person_id"];
         }

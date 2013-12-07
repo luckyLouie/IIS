@@ -54,7 +54,7 @@ class CustomerController extends UpperController {
     }
 
     public function customerAddAction() {
-        if(($pom = $this->timeCheck()) != "") {echo $pom;return $this->render($pom);}
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $customer = new Customer();
         $form = $this->createForm(new CustomerType(), $customer);
         $conn = $this->get('database_connection');
@@ -100,7 +100,7 @@ class CustomerController extends UpperController {
 
     // pouziva se to?? 
     public function customerEditAction() {
-        if(($pom = $this->timeCheck()) != "") {echo $pom;return $this->render($pom);}
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $user = $this->getRequest()->getSession()->get("user");
         $customer = $this->getCustomerByName($user);
         //$customer->setLogin("login");
@@ -120,7 +120,7 @@ class CustomerController extends UpperController {
     }
 
     public function customerEditByIdAction($id) {
-        if(($pom = $this->timeCheck()) != "") {echo $pom;return $this->render($pom);}
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $customer = $this->getCustomerById($id);
         $form = $this->createForm(new CustomerType(), $customer);
         $request = $this->getRequest();
@@ -145,7 +145,7 @@ class CustomerController extends UpperController {
     }
 
     public function customerEditByNameAction($name) {
-        if(($pom = $this->timeCheck()) != "") {echo $pom;return $this->render($pom);}
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $customer = $this->getCustomerByName($name);        
         $id = customerNameToId($name);
         $form = $this->createForm(new CustomerType(), $customer);
@@ -165,7 +165,7 @@ class CustomerController extends UpperController {
     }
 
     public function customerListAction() {
-        if(($pom = $this->timeCheck()) != "") {echo $pom;return $this->render($pom);}
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             
@@ -176,7 +176,7 @@ class CustomerController extends UpperController {
     }
 
     public function customerRemoveByIdAction($id) {
-        if(($pom = $this->timeCheck()) != "") {echo $pom;return $this->render($pom);}
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         $conn->delete('zakaznik', array('id_zakaznika' => $id));
         return $this->redirect($this->generateUrl('_customerList'));
@@ -184,7 +184,7 @@ class CustomerController extends UpperController {
 
     // pouziva se to?
     public function customerRemoveAction() {
-        if(($pom = $this->timeCheck()) != "") {echo $pom;return $this->render($pom);}
+        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         return $this->redirect($this->generateUrl('_customerList'));
         ;
