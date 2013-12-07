@@ -22,6 +22,7 @@ class CustomerController extends UpperController {
             $customer->setPsc($user['psc']);
             $customer->setTelefon($user['kontaktni_udaj']);
             $customer->setTitul($user['titul']);
+            $customer->setDodavatel($user['id_dodavatele']);
             return $customer;
         }
     }
@@ -40,14 +41,16 @@ class CustomerController extends UpperController {
             $customer->setPsc($user['psc']);
             $customer->setTelefon($user['kontaktni_udaj']);
             $customer->setTitul($user['titul']);
+            $customer->setDodavatel($user['id_dodavatele']);
             return $customer;
         }
     }
 
     public function customerAddAction() {
-        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
+        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $customer = new Customer();
-        $form = $this->createForm(new CustomerType(), $customer);
+        $suppliers = $this->getSuppliers();
+        $form = $this->createForm(new CustomerType($suppliers), $customer);
         $conn = $this->get('database_connection');
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
@@ -59,7 +62,7 @@ class CustomerController extends UpperController {
 
                     //$conn = $this->get('database_connection');
                     $conn->beginTransaction();        
-                    $sql = "INSERT INTO `zakaznik` (`id_zakaznika`, `jmeno`, `prijmeni`, `titul`, `adresa`, `psc`, `bankovni_spojeni`, `kontaktni_udaj`, `id_dodavatele`) VALUES (NULL, '" . $c['jmeno'] . "', '" . $c['prijmeni'] . "', '" . $c['titul'] . "', '" . $c['adresa'] . "', '" . $c['psc'] . "', '" . $c['bankovniSpojeni'] . "', '" . $c['telefon'] . "', '1')";
+                    $sql = "INSERT INTO `zakaznik` (`id_zakaznika`, `jmeno`, `prijmeni`, `titul`, `adresa`, `psc`, `bankovni_spojeni`, `kontaktni_udaj`, `id_dodavatele`) VALUES (NULL, '" . $c['jmeno'] . "', '" . $c['prijmeni'] . "', '" . $c['titul'] . "', '" . $c['adresa'] . "', '" . $c['psc'] . "', '" . $c['bankovniSpojeni'] . "', '" . $c['telefon'] . "', '" . $c['dodavatel'] . "')";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute();
 
@@ -91,13 +94,14 @@ class CustomerController extends UpperController {
 
     // pouziva se to?? NOPE
     public function customerEditAction() {
-        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
+        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $user = $this->getRequest()->getSession()->get("user");
         $customer = $this->getCustomerByName($user);
         //$customer->setLogin("login");
 
-        $form = $this->createForm(new CustomerType(), $customer);
-
+        $suppliers = $this->getSuppliers();
+        $form = $this->createForm(new CustomerType($suppliers), $customer);
+        
 
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
@@ -111,9 +115,10 @@ class CustomerController extends UpperController {
     }
 
     public function customerEditByIdAction($id) {
-        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
+        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $customer = $this->getCustomerById($id);
-        $form = $this->createForm(new CustomerType(), $customer);
+        $suppliers = $this->getSuppliers();
+        $form = $this->createForm(new CustomerType($suppliers), $customer);
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $c = $request->get("customer");
@@ -136,7 +141,7 @@ class CustomerController extends UpperController {
     }
 
     public function customerEditByNameAction($name) {
-        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
+        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $customer = $this->getCustomerByName($name);        
         $id = customerNameToId($name);
         $form = $this->createForm(new CustomerType(), $customer);
@@ -156,7 +161,7 @@ class CustomerController extends UpperController {
     }
 
     public function customerListAction() {
-        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
+        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             
@@ -167,7 +172,7 @@ class CustomerController extends UpperController {
     }
 
     public function customerRemoveByIdAction($id) {
-        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
+        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         $conn->delete('zakaznik', array('id_zakaznika' => $id));
         return $this->redirect($this->generateUrl('_customerList'));
@@ -175,14 +180,14 @@ class CustomerController extends UpperController {
 
     // pouziva se to?
     public function customerRemoveAction() {
-        if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
+        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         return $this->redirect($this->generateUrl('_customerList'));
         ;
     }
 
     public function profileAction() {
-       if(($pom = $this->timeCheck()) != "") {return $this->render($pom);}
+       if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
         $user = $this->getRequest()->getSession()->get("user");
         $customer = $this->getCustomerByName($user);
         //$customer->setLogin("login");

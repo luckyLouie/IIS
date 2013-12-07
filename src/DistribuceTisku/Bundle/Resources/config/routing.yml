@@ -197,3 +197,9 @@ _profile:
     defaults: { _controller: DistribuceTiskuBundle:Customer:profile }
     requirements:   
         _method: GET|POST     
+        
+_home:    
+    pattern:  /{url}
+    defaults: { _controller: DistribuceTiskuBundle:Page:index }
+    requirements:   
+        _method: GET         

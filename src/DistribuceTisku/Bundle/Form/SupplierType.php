@@ -15,13 +15,17 @@ class SupplierType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('jmeno');
-        $builder->add('prijmeni');
-        $builder->add('adresa');
-        $builder->add('psc');
+        $builder->add('jmeno',null,array('label' => '*Jméno:'));
+        $builder->add('prijmeni',null,array('label' => '*Příjmení'));
+        $builder->add('adresa',null,array('label' => '*Adresa:'));
+        $builder->add('psc',null,array('label' => '*Psč:'));
         $builder->add('telefon');
-        $builder->add('login');
-        $builder->add('password');
+        $builder->add('login',null,array('label' => '*Login:'));
+            $builder->add('password', 'repeated', array(
+           'first_name' => 'heslo',
+           'second_name' => 'hesloZnovu',
+           'type' => 'password'
+        ));
     }
 
     public function getName()

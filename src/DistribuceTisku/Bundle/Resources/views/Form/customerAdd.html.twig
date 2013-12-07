@@ -35,8 +35,11 @@
         {{ form_row(form.adresa) }}
         {{ form_row(form.psc) }}
         {{ form_row(form.prijmeni) }}
-        {{ form_row(form.bankovniSpojeni) }}
-        {{ form_row(form.telefon) }}
+        {{ form_row(form.bankovniSpojeni, {'required': false}) }}
+        {{ form_row(form.telefon, {'required': false}) }}
+    {% block hideDodavatel %}
+        {{ form_rest(form.dodavatel)}}
+    {% endblock %} 
     {% block formRest %}
         {{ form_rest(form) }}
     {% endblock %} 

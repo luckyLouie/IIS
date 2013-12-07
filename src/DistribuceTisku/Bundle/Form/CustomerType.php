@@ -13,18 +13,30 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class CustomerType extends AbstractType
 {
+    private $suppliers = null;
+    
+    function __construct($suppliers = null) {
+        $this->suppliers = $suppliers;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id','hidden');
-        $builder->add('jmeno');
-        $builder->add('prijmeni');
+        $builder->add('jmeno',null,array('label' => '*Jméno:'));
+        $builder->add('prijmeni',null,array('label' => '*Příjmení'));
         $builder->add('titul');
-        $builder->add('adresa');
-        $builder->add('psc');
+        $builder->add('adresa',null,array('label' => '*Adresa'));
+        $builder->add('psc',null,array('label' => '*Psč'));
         $builder->add('bankovniSpojeni');
         $builder->add('telefon');
-        $builder->add('login');
-        $builder->add('password');
+        $builder->add('dodavatel', 'choice', array('choices' => $this->suppliers));
+        $builder->add('login',null,array('label' => '*Login'));
+       // $builder->add('password');
+            $builder->add('password', 'repeated', array(
+           'first_name' => 'heslo',
+           'second_name' => 'hesloZnovu',
+           'type' => 'password'
+        ));
     }
 
     public function getName()

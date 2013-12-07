@@ -20,7 +20,17 @@ class Customer {
     protected $psc;
     protected $bankovniSpojeni;
     protected $telefon;
+    protected $dodavatel;
+    
+    public function getDodavatel() {
+        return $this->dodavatel;
+    }
 
+    public function setDodavatel($dodavatel) {
+        $this->dodavatel = $dodavatel;
+    }
+
+        
     public function getLogin()
     {
         return $this->login;

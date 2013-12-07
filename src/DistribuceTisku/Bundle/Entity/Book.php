@@ -75,9 +75,6 @@ class Book {
         $metadata->addPropertyConstraint('issn', new NotBlank());
         $metadata->addPropertyConstraint('titul', new NotBlank());
         $metadata->addPropertyConstraint('cena', new NotBlank());
-        $metadata->addPropertyConstraint('denVydani', new NotBlank());
-        $metadata->addPropertyConstraint('nakladatelstvi', new NotBlank());
-        $metadata->addPropertyConstraint('vydavatel', new NotBlank());
     }
 
 }
