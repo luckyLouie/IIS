@@ -8,18 +8,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class SecurityController extends Controller
-{
-    
-    public function timeCheck(){
-        $session = $this->getRequest()->getSession();
-        if (time() - $session->getMetadataBag()->getCreated() > 20) {
-            $session->clear();
-            // redirect to expired session page
-            return $this->render('DistribuceTiskuBundle:Security:login.html.twig');
-        }
-        return;
-    }
-    
+{    
     public function loginAction()
     {
         return$this->render('DistribuceTiskuBundle:Security:login.html.twig');
@@ -49,6 +38,8 @@ class SecurityController extends Controller
             $session->set('user', $user);
             $session->set('type', $type);
             $session->set('id', $id);
+            $session->set('timeCreated', time());
+            $session->set('expire', 3600);
             return $this->render('DistribuceTiskuBundle:Page:index.html.twig');
         }else{
             return $this->render('DistribuceTiskuBundle:Security:login.html.twig');
