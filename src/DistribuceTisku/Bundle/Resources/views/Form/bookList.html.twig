@@ -22,8 +22,9 @@
 <table>
     <thead>
         <th>ISSN</th>
-        <th>cena</th>
         <th>titul</th>
+        <th>cena</th>
+        <th>typ</th>
         <th>den vydání</th>
         <th>nakladatelstvi</th>
         <th>vydavatel</th>
@@ -34,8 +35,9 @@
     {% for book in books %}
     <tr>
         <td>{{ book.ISSN }}</td>
-        <td>{{ book.cena }}</td>
         <td>{{ book.titul }}</td>
+        <td>{{ book.cena }}</td>
+        <td>{{ book.typ }}</td>
         <td>{{ book.den_vydani }}</td>
         <td>{{ book.nakladatelstvi }}</td>
         <td>{{ book.vydavatel }}</td>

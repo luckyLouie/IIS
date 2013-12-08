@@ -7,6 +7,17 @@
     <header>
         <h1>Seznam dodavatelů</h1>
     </header>
+    {% for flashMessage in app.session.flashbag.get('ok') %}
+    <div class="blogger-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %}
+
+    {% for flashMessage in app.session.flashbag.get('exception') %}
+    <div class="exception-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %} 
 <table>
     <thead>
         <th>id</th>
@@ -15,6 +26,7 @@
         <th>adresa</th>
         <th>psč</th>
         <th>telefon</th>
+         <th>doručované odběry</th>
         <th>editovat</th>
         <th>smazat</th>
     </thead>
@@ -26,6 +38,7 @@
         <td>{{ dodavatel.adresa }}</td>
         <td>{{ dodavatel.psc }}</td>
         <td>{{ dodavatel.kontaktni_udaj }}</td>
+        <td><a href="{{ path('_supplierSubsList',{'id' : dodavatel.id_dodavatele} )}}"><img src="{{ asset('images/edit.jpg') }}" alt="dorucovane odbery" width="20" height="20"></a></td>
         <td><a href="{{ path('_supplierEdit',{'id' : dodavatel.id_dodavatele} )}}"><img src="{{ asset('images/edit.jpg') }}" alt="editovat dodavatel" width="20" height="20"></a></td>
         <td><a href="{{ path('_supplierDelete',{'id' : dodavatel.id_dodavatele} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat dodavatele" width="20" height="20"></a></td>
     </tr>    

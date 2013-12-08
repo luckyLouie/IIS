@@ -126,6 +126,18 @@ _supplierList:
     requirements:   
         _method: GET|POST
         
+_supplierSubsList:     
+    pattern:  /supplierSubsList/{id}
+    defaults: { _controller: DistribuceTiskuBundle:Form:supplierSubsList }
+    requirements:   
+        _method: GET|POST
+
+_dsupplierSubsList:     
+    pattern:  /dsupplierSubsList
+    defaults: { _controller: DistribuceTiskuBundle:Form:dsupplierSubsList }
+    requirements:   
+        _method: GET|POST
+        
 _subscriptionAdd:    
     pattern:  /subscriptionAdd
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionAdd }
@@ -196,7 +208,13 @@ _profile:
     pattern:  /profile
     defaults: { _controller: DistribuceTiskuBundle:Customer:profile }
     requirements:   
-        _method: GET|POST     
+        _method: GET|POST
+        
+_dprofile:    
+    pattern:  /dprofile
+    defaults: { _controller: DistribuceTiskuBundle:Form:dprofile }
+    requirements:   
+        _method: GET|POST        
         
 _home:    
     pattern:  /{url}

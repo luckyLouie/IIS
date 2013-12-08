@@ -22,7 +22,17 @@ class Book {
     protected $denVydani;
     protected $nakladatelstvi;
     protected $vydavatel;
+    protected $typ;
     
+    public function getTyp() {
+        return $this->typ;
+    }
+
+    public function setTyp($typ) {
+        $this->typ = $typ;
+    }
+
+        
     public function getIssn() {
         return $this->issn;
     }

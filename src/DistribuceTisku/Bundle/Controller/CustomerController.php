@@ -50,7 +50,8 @@ class CustomerController extends UpperController {
         if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $customer = new Customer();
         $suppliers = $this->getSuppliers();
-        $form = $this->createForm(new CustomerType($suppliers), $customer);
+        $areas = $this->getAreas();
+        $form = $this->createForm(new CustomerType($suppliers, $areas), $customer);
         $conn = $this->get('database_connection');
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
@@ -74,7 +75,7 @@ class CustomerController extends UpperController {
                         $id = $type["id_zakaznika"];
                     }
 
-                    $sql = "INSERT INTO `users` (`user_id`, `passwd`, `type`, `person_id`) VALUES ('" . $c['login'] . "', '" . $c['password'] . "', '2', '" . $id . "')";
+                    $sql = "INSERT INTO `users` (`user_id`, `passwd`, `type`, `person_id`) VALUES ('" . $c['login'] . "', '" . $c['password']['heslo'] . "', '2', '" . $id . "')";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute();
                     $conn->commit();    
@@ -100,7 +101,8 @@ class CustomerController extends UpperController {
         //$customer->setLogin("login");
 
         $suppliers = $this->getSuppliers();
-        $form = $this->createForm(new CustomerType($suppliers), $customer);
+        $areas = $this->getAreas();
+        $form = $this->createForm(new CustomerType($suppliers, $areas), $customer);
         
 
         $request = $this->getRequest();
@@ -118,7 +120,8 @@ class CustomerController extends UpperController {
         if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $customer = $this->getCustomerById($id);
         $suppliers = $this->getSuppliers();
-        $form = $this->createForm(new CustomerType($suppliers), $customer);
+        $areas = $this->getAreas();
+        $form = $this->createForm(new CustomerType($suppliers, $areas), $customer);
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $c = $request->get("customer");
@@ -132,6 +135,7 @@ class CustomerController extends UpperController {
             //nacteni nejnovejsich dat o uzivateli
             $customer = $this->getCustomerById($id);
             $form = $this->createForm(new CustomerType(), $customer);
+                    $this->get('session')->getFlashBag()->add('ok', 'Uprava zákazníka proběhla úspěšně'); 
             return $this->render('DistribuceTiskuBundle:Form:customeredit.html.twig', array(
             'form' => $form->createView()));
         }
@@ -167,14 +171,15 @@ class CustomerController extends UpperController {
             
         }
         $conn = $this->get('database_connection');
-        $zakaznici = $conn->fetchAll('SELECT * FROM zakaznik ORDER BY id_zakaznika ASC');
+        $zakaznici = $conn->fetchAll('SELECT `zakaznik`.`id_zakaznika` , `oblast`.`nazev`, `oblast`.`psc`,`oblast`.`posta`, `zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`zakaznik`.`titul`,`zakaznik`.`adresa`,`zakaznik`.`bankovni_spojeni`,`zakaznik`.`kontaktni_udaj`      FROM zakaznik JOIN `oblast` ON `oblast`.`id_oblast` = `zakaznik`.`psc` ORDER BY id_zakaznika ASC');
         return $this->render('DistribuceTiskuBundle:Form:customerlist.html.twig', array('zakaznici' => $zakaznici));
     }
 
     public function customerRemoveByIdAction($id) {
         if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
-        $conn = $this->get('database_connection');
+        $conn = $this->get('database_connection');      
         $conn->delete('zakaznik', array('id_zakaznika' => $id));
+        $this->get('session')->getFlashBag()->add('ok', 'Odstranění zákazníka proběhlo úspěšně');        
         return $this->redirect($this->generateUrl('_customerList'));
     }
 
@@ -182,6 +187,7 @@ class CustomerController extends UpperController {
     public function customerRemoveAction() {
         if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
+        $this->get('session')->getFlashBag()->add('ok', 'Odstranění zákazníka proběhlo úspěšně');
         return $this->redirect($this->generateUrl('_customerList'));
         ;
     }
@@ -189,6 +195,7 @@ class CustomerController extends UpperController {
     public function profileAction() {
        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
         $user = $this->getRequest()->getSession()->get("user");
+        $id = $this->customerNameToId($user);
         $customer = $this->getCustomerByName($user);
         //$customer->setLogin("login");
 
@@ -207,10 +214,10 @@ class CustomerController extends UpperController {
             $customer = $this->getCustomerById($id);
             $form = $this->createForm(new CustomerType(), $customer);
             $this->get('session')->getFlashBag()->add('ok', 'Editace profilu byla úspěšná');
-            return $this->render('DistribuceTiskuBundle:Form:customeredit.html.twig', array(
+            return $this->render('DistribuceTiskuBundle:Form:profile.html.twig', array(
             'form' => $form->createView()));
         }
-        return $this->render('DistribuceTiskuBundle:Form:customeredit.html.twig', array(
+        return $this->render('DistribuceTiskuBundle:Form:profile.html.twig', array(
                     'form' => $form->createView()
         ));  
     }

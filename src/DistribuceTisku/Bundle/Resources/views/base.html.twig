@@ -20,8 +20,6 @@
                     {% block navigation %}
                         <nav>
                             <ul class="navigation">
-                                <li><a href="{{ path('_homepage')}}">Home</a></li>
-                                <li><a href="{{ path('_about')}}">About</a></li>
                                 {% if app.session.get('user') != "" %}  
                                 <li><a href="{{ path('_logout')}}">Odhlásit se</a>  
                                 {{ app.session.get('user')}}
@@ -69,8 +67,8 @@
                 </ul>
                 {% elseif app.session.get('type') == "1" %}
                 <ul>
-                    <li><a href="{{ path('_about')}}">Zobrazit zakázky</a></li>
-                    <li><a href="{{ path('_about')}}">Upravit profil</a></li>
+                    <li><a href="{{ path('_dsupplierSubsList')}}">Zobrazit zakázky</a></li>
+                    <li><a href="{{ path('_dprofile')}}">Upravit profil</a></li>
                 </ul>
                 {% elseif app.session.get('type') == "2" %}
                 <ul>

@@ -1,0 +1,42 @@
+
+{% extends 'DistribuceTiskuBundle::layout.html.twig' %}
+
+{% block title %}Seznam doručovaných odběrů{% endblock%}
+
+{% block body %}
+    <header>
+        <h1>Seznam doručovaných odběrů</h1>
+    </header>
+<table>
+    <thead>
+        <th>den</th>
+        <th>psč zakaznika</th>
+        <th>adresa zakaznika</th>        
+        <th>titul</th>
+        <th>ISSN</th>
+        <th>jméno zakaznika</th>
+        <th>příjmení zakaznika</th>
+        <th>telefon zakaznika</th>
+        {% block adminOnlyTh %}
+        <th>editovat</th>
+        <th>smazat</th>
+        {% endblock %}
+    </thead>
+    {% for odber in odbery %}
+    <tr>
+        <td>{{ odber.den_odberu }}</td>
+        <td>{{ odber.psc }}, {{ odber.nazev }}, {{ odber.posta }}</td>
+        <td>{{ odber.adresa }}</td>        
+        <td>{{ odber.titul }}</td>
+        <td>{{ odber.issn }}</td>
+        <td>{{ odber.jmeno }}</td>
+        <td>{{ odber.prijmeni }}</td>
+        <td>{{ odber.kontaktni_udaj }}</td>
+                {% block adminOnlyTd %}
+        <td><a href="{{ path('_supplierEdit',{'id' : odber.id_dodavatele} )}}"><img src="{{ asset('images/edit.jpg') }}" alt="editovat dodavatel" width="20" height="20"></a></td>
+        <td><a href="{{ path('_supplierDelete',{'id' : odber.id_dodavatele} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat dodavatele" width="20" height="20"></a></td>
+            {% endblock %}
+    </tr>    
+    {% endfor %}
+</table>
+{% endblock %}

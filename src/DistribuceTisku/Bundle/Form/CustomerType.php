@@ -14,9 +14,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 class CustomerType extends AbstractType
 {
     private $suppliers = null;
-    
-    function __construct($suppliers = null) {
+    private $areas = null;
+    function __construct($suppliers = null, $areas = null) {
         $this->suppliers = $suppliers;
+        $this->areas = $areas;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -26,7 +27,7 @@ class CustomerType extends AbstractType
         $builder->add('prijmeni',null,array('label' => '*Příjmení'));
         $builder->add('titul');
         $builder->add('adresa',null,array('label' => '*Adresa'));
-        $builder->add('psc',null,array('label' => '*Psč'));
+        $builder->add('psc', 'choice', array('choices' => $this->areas));
         $builder->add('bankovniSpojeni');
         $builder->add('telefon');
         $builder->add('dodavatel', 'choice', array('choices' => $this->suppliers));

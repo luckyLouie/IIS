@@ -14,7 +14,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class FormController extends UpperController {
 
     public function getBookByISSN($id) {
-        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }
         $b = new Book();
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM tiskovina WHERE ISSN='" . $id . "';";
@@ -31,7 +33,9 @@ class FormController extends UpperController {
     }
 
     public function bookAddAction() {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $book = new Book();
         $form = $this->createForm(new BookType(), $book);
 
@@ -43,7 +47,7 @@ class FormController extends UpperController {
                 $c = $request->get("titul");
                 $conn = $this->get('database_connection');
 
-                $sql = "INSERT INTO `tiskovina` (`ISSN`, `cena`, `titul`, `den_vydani`, `nakladatelstvi`, `vydavatel`) VALUES ('" . $c['issn'] . "', '" . $c['titul'] . "', '" . $c['cena'] . "', '" . $c['denVydani'] . "', '" . $c['nakladatelstvi'] . "', '" . $c['vydavatel'] . "')";
+                $sql = "INSERT INTO `tiskovina` (`ISSN`, `cena`, `titul`, `den_vydani`, `nakladatelstvi`, `vydavatel`,`typ`) VALUES ('" . $c['issn'] . "', '" . $c['titul'] . "', '" . $c['cena'] . "', '" . $c['denVydani'] . "', '" . $c['nakladatelstvi'] . "', '" . $c['vydavatel'] . "', '" . $c['typ'] . "')";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
 
@@ -57,7 +61,9 @@ class FormController extends UpperController {
     }
 
     public function bookEditAction($id) {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $book = $this->getBookByISSN($id);
         $form = $this->createForm(new BookType(), $book);
         $request = $this->getRequest();
@@ -66,7 +72,7 @@ class FormController extends UpperController {
             $conn = $this->get('database_connection');
 //cena 	titul 	den_vydani 	nakladatelstvi 	vydavatel
             $sql = "UPDATE `tiskovina` SET cena='" . $c['cena'] . "', den_vydani='" . $c['denVydani'] . "', ";
-            $sql .= "nakladatelstvi='" . $c['nakladatelstvi'] . "', vydavatel='" . $c['vydavatel'] . "' WHERE ISSN='" . $id . "'";
+            $sql .= "nakladatelstvi='" . $c['nakladatelstvi'] . "', vydavatel='" . $c['vydavatel'] . "' , typ='" . $c['typ'] . "' WHERE ISSN='" . $id . "'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $this->get('session')->getFlashBag()->add('ok', 'Titul byl uspesne upraven.');
@@ -78,7 +84,9 @@ class FormController extends UpperController {
     }
 
     public function bookListAction() {
-        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             
@@ -90,7 +98,9 @@ class FormController extends UpperController {
     }
 
     public function supplierAddAction() {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $supplier = new Supplier();
         $form = $this->createForm(new SupplierType(), $supplier);
 
@@ -99,37 +109,46 @@ class FormController extends UpperController {
             $form->bind($request);
 
             if ($form->isValid()) {
-                $c = $request->get("supplier");
+                try {
+                    $c = $request->get("supplier");
 
-                $conn = $this->get('database_connection');
 
-                $sql = "INSERT INTO `dodavatel` (`jmeno`, `prijmeni`, `adresa`, `psc`, `kontaktni_udaj`) VALUES ('" . $c['jmeno'] . "', '" . $c['prijmeni'] . "', '" . $c['adresa'] . "', '" . $c['psc'] . "', '" . $c['telefon'] . "')";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
+                    $conn = $this->get('database_connection');
+                    $conn->beginTransaction();
+                    $sql = "INSERT INTO `dodavatel` (`jmeno`, `prijmeni`, `adresa`, `psc`, `kontaktni_udaj`) VALUES ('" . $c['jmeno'] . "', '" . $c['prijmeni'] . "', '" . $c['adresa'] . "', '" . $c['psc'] . "', '" . $c['telefon'] . "')";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
 
-                $sql = "SELECT `id_dodavatele` FROM `dodavatel` WHERE `jmeno` = '" . $c['jmeno'] . "' AND `prijmeni` = '" . $c['prijmeni'] . "' AND `adresa` = '" . $c['adresa'] . "' LIMIT 1";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
+                    $sql = "SELECT `id_dodavatele` FROM `dodavatel` WHERE `jmeno` = '" . $c['jmeno'] . "' AND `prijmeni` = '" . $c['prijmeni'] . "' AND `adresa` = '" . $c['adresa'] . "' LIMIT 1";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
 
-                foreach ($stmt as $type) {
-                    $id = $type["id_dodavatele"];
+                    foreach ($stmt as $type) {
+                        $id = $type["id_dodavatele"];
+                    }
+
+                    $sql = "INSERT INTO `users` (`user_id`, `passwd`, `type`, `person_id`) VALUES ('" . $c['login'] . "', '" . $c['password'] . "', '1', '" . $id . "')";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $conn->commit();
+                    $this->get('session')->getFlashBag()->add('ok', 'Nový dodavatel byl úspěšně vložen');
+                    return $this->redirect($this->generateUrl('_supplierAdd'));
+                } catch (\Exception $e) {
+                    $this->get('session')->getFlashBag()->add('exception', 'Vyskytla se chyba pri vytvareni noveho doručovatele.');
+                    return $this->redirect($this->generateUrl('_supplierAdd'));
                 }
-
-                $sql = "INSERT INTO `users` (`user_id`, `passwd`, `type`, `person_id`) VALUES ('" . $c['login'] . "', '" . $c['password'] . "', '1', '" . $id . "')";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
-
-                $this->get('session')->getFlashBag()->add('ok', 'Nový dodavatel byl úspěšně vložen');
-                return $this->redirect($this->generateUrl('_supplierAdd'));
             }
         }
+
         return $this->render('DistribuceTiskuBundle:Form:supplierAdd.html.twig', array(
                     'form' => $form->createView()
         ));
     }
 
-    public function supplierEditAction($id)      
-    {        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+    public function supplierEditAction($id) {
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $suplier = new Supplier();
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM `dodavatel` WHERE id_dodavatele = '" . $id . "'";
@@ -160,9 +179,48 @@ class FormController extends UpperController {
         ));
     }
 
-    public function supplierListAction()
-    {
-        if(($pom = $this->timeCheck(1)) != "") {return $this->render($pom);}
+    public function dprofileAction(){
+                if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }    
+        $session = $this->getRequest()->getSession();
+            $id = $this->supplierNameToId($session->get('user'));
+                    $request = $this->getRequest();
+                               
+        $suplier = new Supplier();
+        $conn = $this->get('database_connection');
+        $sql = "SELECT * FROM `dodavatel` WHERE id_dodavatele = '" . $id . "'";
+        $dodavatele = $conn->prepare($sql);
+        $dodavatele->execute();
+        foreach ($dodavatele as $dodavatel) {
+            $suplier->setJmeno($dodavatel['jmeno']);
+            $suplier->setPrijmeni($dodavatel['prijmeni']);
+            $suplier->setAdresa($dodavatel['adresa']);
+            $suplier->setPsc($dodavatel['psc']);
+            $suplier->setTelefon($dodavatel['kontaktni_udaj']);
+            $suplier->setId($id);
+        }
+        $form = $this->createForm(new SupplierType(), $suplier);
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            $c = $request->get("supplier");
+            $sql = "UPDATE `dodavatel` SET `jmeno` = '" . $c['jmeno'] . "', `prijmeni` = '" . $c['prijmeni'] . "', `adresa` = '" . $c['adresa'] . "', `psc` = '" . $c['psc'] . "', `kontaktni_udaj` = '" . $c['telefon'] . "' WHERE `id_dodavatele` = '" . $id . "'";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+
+            $this->get('session')->getFlashBag()->add('ok', 'Editace dodavatele byla úspěšná');
+            return $this->redirect($this->generateUrl('_dprofile'));
+        }
+
+        return $this->render('DistribuceTiskuBundle:Form:dsupplierEdit.html.twig', array(
+                    'form' => $form->createView()
+        ));
+    }
+    
+    public function supplierListAction() {
+        if (($pom = $this->timeCheck(1)) != "") {
+            return $this->render($pom);
+        }
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM `dodavatel`";
         $dodavatel = $conn->prepare($sql);
@@ -170,11 +228,52 @@ class FormController extends UpperController {
         return $this->render('DistribuceTiskuBundle:Form:supplierList.html.twig', array('dodavatele' => $dodavatel));
     }
 
-    public function supplierDeleteAction($id)
-    {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+    private function getSupplierSubsList($id) {
+        $conn = $this->get('database_connection');
+        $sql = "SELECT `odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`zakaznik`.`adresa`,`oblast`.`psc`,`oblast`.`nazev`,`oblast`.`posta`,`zakaznik`.`kontaktni_udaj`,`tiskovina`.`titul`,`tiskovina`.`issn`,`zakaznik`.`id_dodavatele`  FROM `odber`";
+        $sql = $sql . "JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
+        $sql = $sql . "JOIN `tiskovina` ON `odber`.`ISSN` = `tiskovina`.`ISSN` ";
+        $sql = $sql . "JOIN `dodavatel` ON `dodavatel`.`id_dodavatele` = `zakaznik`.`id_dodavatele` ";
+        $sql = $sql . "JOIN `oblast` ON `oblast`.`id_oblast` = `zakaznik`.`psc` ";
+        $sql = $sql . " WHERE `dodavatel`.`id_dodavatele`=" . $id;
+        $sql = $sql . " ORDER BY FIELD(`odber`.`den_odberu`, 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek','Sobota', 'Neděle')";
+
+        $odbery = $conn->prepare($sql);
+        $odbery->execute();
+        return $odbery;
+    }
+
+    public function supplierSubsListAction($id) {
+        if (($pom = $this->timeCheck(1)) != "") {
+            return $this->render($pom);
+        }
+        $session = $this->getRequest()->getSession();
+        if ($session->get('type') == 1) {
+            $id = $this->supplierNameToId($session->get('user'));
+        }
+        $odbery = $this->getSupplierSubsList($id);
+        return $this->render('DistribuceTiskuBundle:Form:supplierSubsList.html.twig', array('odbery' => $odbery));
+    }
+
+    public function dsupplierSubsListAction() {
+        if (($pom = $this->timeCheck(1)) != "") {
+            return $this->render($pom);
+        }
+        $session = $this->getRequest()->getSession();
+
+            $id = $this->supplierNameToId($session->get('user'));
+            
+        $odbery = $this->getSupplierSubsList($id);
+        return $this->render('DistribuceTiskuBundle:Form:dsupplierSubsList.html.twig', array('odbery' => $odbery));
+    }    
+    
+    public function supplierDeleteAction($id) {
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $conn = $this->get('database_connection');
         $conn->delete('dodavatel', array('id_dodavatele' => $id));
+        $this->get('session')->getFlashBag()->add('ok', 'Doručovatel byl úspěšně smazán');
         return $this->redirect($this->generateUrl('_supplierList'));
     }
 
@@ -195,13 +294,13 @@ class FormController extends UpperController {
         $form = $this->createFormBuilder($subscription)
                 ->add('uzivatel', 'choice', array('choices' => $uzivatel))
                 ->add('denOdberu', 'choice', array('choices' => array(
-                        'Neděle' => 'Neděle',
                         'Pondělí' => 'Pondělí',
                         'Úterý' => 'Úterý',
                         'Středa' => 'Středa',
                         'Čtvrtek' => 'Čtvrtek',
                         'Pátek' => 'Pátek',
-                        'Sobota' => 'Sobota'
+                        'Sobota' => 'Sobota',
+                        'Neděle' => 'Neděle'
             )))
                 ->add('odberOd', 'date', array(
                     'input' => 'timestamp',
@@ -219,7 +318,9 @@ class FormController extends UpperController {
     }
 
     public function subscriptionAddAction() {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $subscription = new Subscription();
         $subscription->setOdberDo(2013);
         $form = $this->makeSubscriptionForm($subscription);
@@ -243,7 +344,9 @@ class FormController extends UpperController {
     }
 
     public function subscriptionEditAction($id) {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $subscription = new Subscription();
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM `odber` WHERE id_odberu = '" . $id . "'";
@@ -277,15 +380,23 @@ class FormController extends UpperController {
     }
 
     private function getSubscriptionList($id = "") {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
-        $conn = $this->get('database_connection');
-        $sql = "SELECT `platby`.`obdobi`,`platby`.`zpusob_platby`,`odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
-        $sql = $sql . "JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
-        $sql = $sql . "JOIN `tiskovina` ON `odber`.`ISSN` = `tiskovina`.`ISSN` ";
-        $sql = $sql . "JOIN `platby` ON `odber`.`id_platby` = `platby`.`id_platby` ";
-        if ($id != "") {
-            $sql = $sql . " WHERE `odber`.`id_zakaznika`=" . $id;
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
         }
+        $conn = $this->get('database_connection');
+        if ($id != "") {
+            $sql = "SELECT `platby`.`obdobi`,`platby`.`zpusob_platby`,`odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
+            $sql = $sql . "JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
+            $sql = $sql . "JOIN `tiskovina` ON `odber`.`ISSN` = `tiskovina`.`ISSN` ";
+            $sql = $sql . "JOIN `platby` ON `odber`.`id_platby` = `platby`.`id_platby` ";
+            $sql = $sql . " WHERE `odber`.`id_zakaznika`=" . $id;
+        } else {
+            $sql = "SELECT `odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
+            $sql = $sql . "JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
+            $sql = $sql . "JOIN `tiskovina` ON `odber`.`ISSN` = `tiskovina`.`ISSN` ";
+        }
+
+
         $sql = $sql . " ORDER BY `odber`.`id_odberu`";
         $odbery = $conn->prepare($sql);
         $odbery->execute();
@@ -293,13 +404,17 @@ class FormController extends UpperController {
     }
 
     public function subscriptionListAction() {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $odbery = $this->getSubscriptionList();
         return $this->render('DistribuceTiskuBundle:Form:subscriptionList.html.twig', array('odbery' => $odbery));
     }
 
     public function subscriptionInterruptionAction($id) {
-        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }
         $interuption = new SubscriptionInterruption();
         $interuption->setId($id);
         $form = $this->createFormBuilder($interuption)
@@ -340,16 +455,20 @@ class FormController extends UpperController {
         ));
     }
 
-    public function subscriptionRemoveAction($id){
-        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
+    public function subscriptionRemoveAction($id) {
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }
         $conn = $this->get('database_connection');
         $conn->delete('odber', array('id_odberu' => $id));
         $conn->delete('preruseni_odberu', array('id_odberu' => $id));
         return $this->redirect($this->generateUrl('_subscriptionList'));
     }
 
-    public function subscriptionInterruptionListAction( $id) {
-        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
+    public function subscriptionInterruptionListAction($id) {
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }
         $conn = $this->get('database_connection');
         $sql = "SELECT `id_preruseni`, `preruseni_od`, `preruseni_do` FROM `preruseni_odberu` WHERE `id_odberu` = '" . $id . "'";
         $preruseni = $conn->prepare($sql);
@@ -358,7 +477,9 @@ class FormController extends UpperController {
     }
 
     public function subscriptionInteruptionDeleteAction($id) {
-        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }
         $conn = $this->get('database_connection');
 
         $conn->delete('preruseni_odberu', array('id_preruseni' => $id));
@@ -374,22 +495,29 @@ class FormController extends UpperController {
     //******************USER********************************************************
 
     public function ubookListAction() {
-        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }
         $conn = $this->get('database_connection');
         $books = $conn->fetchAll('SELECT * FROM tiskovina ORDER BY titul ASC');
         return $this->render('DistribuceTiskuBundle:Form:ubooklist.html.twig', array('books' => $books));
     }
 
     public function usubscriptionListAction() {
-        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }
         $session = $this->getRequest()->getSession();
         $odbery = $this->getSubscriptionList($session->get('id'));
+        //$odbery = $this->getSubscriptionList();
         return $this->render('DistribuceTiskuBundle:Form:usubscriptionList.html.twig', array('odbery' => $odbery));
     }
 
     public function usubscriptionAddAction() {
-        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
-         $user = $this->getRequest()->getSession()->get("user");
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }
+        $user = $this->getRequest()->getSession()->get("user");
         $id = $this->customerNameToId($user);
         $subscription = new Subscription();
         $subscription->setOdberDo(2013);
@@ -400,7 +528,7 @@ class FormController extends UpperController {
         if ($form->isValid()) {
             $c = $request->get("form");
             $conn = $this->get('database_connection');
-            $sql = "INSERT INTO `odber` (`den_odberu`, `odber_od`, `odber_do`, `id_zakaznika`, `ISSN`) VALUES ('" . $c['denOdberu'] . "', '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', '" . $id. "', '" . $c['titul'] . "')";
+            $sql = "INSERT INTO `odber` (`den_odberu`, `odber_od`, `odber_do`, `id_zakaznika`, `ISSN`) VALUES ('" . $c['denOdberu'] . "', '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', '" . $id . "', '" . $c['titul'] . "')";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
@@ -414,7 +542,9 @@ class FormController extends UpperController {
     }
 
     public function usubscriptionEditAction($id) {
-        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }
         $subscription = new Subscription();
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM `odber` WHERE id_odberu = '" . $id . "'";

@@ -33,6 +33,7 @@
             {{ form_row(form.titul) }}
         {% endblock %}
         {{ form_row(form.cena) }}
+        {{ form_row(form.typ, {'required': false}) }}
         {{ form_row(form.denVydani, {'required': false}) }}
         {{ form_row(form.nakladatelstvi, {'required': false}) }}
         {{ form_row(form.vydavatel, {'required': false}) }}
