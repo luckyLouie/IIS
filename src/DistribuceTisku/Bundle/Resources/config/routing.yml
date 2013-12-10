@@ -73,7 +73,7 @@ _customerRemoveById:
 
         
 _customerList:    
-    pattern:  /customerList
+    pattern:  /customerList/{offset}
     defaults: { _controller: DistribuceTiskuBundle:Customer:customerList }
     requirements:   
         _method: GET|POST    
@@ -91,7 +91,7 @@ _bookEdit:
         _method: GET|POST
 
 _bookList:
-    pattern:  /bookList
+    pattern:  /bookList/{offset}
     defaults: { _controller: DistribuceTiskuBundle:Form:bookList }
     requirements:   
         _method: GET|POST  
@@ -103,7 +103,7 @@ _bookDeleteById:
         _method: GET|POST 
 
 _ubookList:
-    pattern:  /ubookList
+    pattern:  /ubookList/{offset}
     defaults: { _controller: DistribuceTiskuBundle:Form:ubookList }
     requirements:   
         _method: GET|POST  
@@ -128,7 +128,7 @@ _supplierDelete:
         _method: GET|POST
 
 _supplierList:    
-    pattern:  /supplierList
+    pattern:  /supplierList/{offset}
     defaults: { _controller: DistribuceTiskuBundle:Form:supplierList }
     requirements:   
         _method: GET|POST
@@ -176,13 +176,13 @@ _subscription:
         _method: GET|POST
         
 _subscriptionList:    
-    pattern:  /subscriptionList
+    pattern:  /subscriptionList/{offset}
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionList }
     requirements:   
         _method: GET|POST
 
 _usubscriptionList:    
-    pattern:  /usubscriptionList
+    pattern:  /usubscriptionList/{offset}
     defaults: { _controller: DistribuceTiskuBundle:Form:usubscriptionList }
     requirements:   
         _method: GET|POST
@@ -200,7 +200,7 @@ _subscriptionInterruption:
         _method: GET|POST
         
 _subscriptionInterruptionList:    
-    pattern:  /subscriptionInterruptionList/{id}
+    pattern:  /subscriptionInterruptionList/{id}/{offset}
     defaults: { _controller: DistribuceTiskuBundle:Form:subscriptionInterruptionList }
     requirements:   
         _method: GET|POST

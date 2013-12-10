@@ -71,7 +71,7 @@ class FormController extends UpperController {
             $c = $request->get("titul");
             $conn = $this->get('database_connection');
 //cena 	titul 	den_vydani 	nakladatelstvi 	vydavatel
-            $sql = "UPDATE `tiskovina` SET titul='" . $c['titul'] . "',issn='" . $c['issn'] . "',cena='" . $c['cena'] . "', den_vydani='" . $c['denVydani'] . "', ";
+            $sql = "UPDATE `tiskovina` SET cena='" . $c['cena'] . "', den_vydani='" . $c['denVydani'] . "', ";
             $sql .= "nakladatelstvi='" . $c['nakladatelstvi'] . "', vydavatel='" . $c['vydavatel'] . "' , typ='" . $c['typ'] . "' WHERE ISSN='" . $id . "'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
@@ -83,31 +83,29 @@ class FormController extends UpperController {
         ));
     }
 
-    public function bookListAction() {
+    public function bookListAction($offset) {
         if (($pom = $this->timeCheck(2)) != "") {
             return $this->render($pom);
         }
-        $request = $this->getRequest();
-        if ($request->getMethod() == 'POST') {
-            
-        }
-
         $conn = $this->get('database_connection');
-        $books = $conn->fetchAll('SELECT * FROM tiskovina ORDER BY titul ASC');
-        return $this->render('DistribuceTiskuBundle:Form:booklist.html.twig', array('books' => $books));
-    }
-    
-    public function bookDeleteByIdAction($id) {
-        if (($pom = $this->timeCheck(0)) != "") {
-            return $this->render($pom);
+        
+        
+        $sql = "SELECT COUNT( * ) FROM `tiskovina` ";
+        $count = $conn->prepare($sql);
+        $count->execute();
+        $sql = "SELECT * FROM tiskovina ORDER BY titul ASC";
+        if($count > $offset){
+            $sql = $sql." LIMIT ".$offset." , 10";
+            $offset = $offset+10;
         }
-        $conn = $this->get('database_connection');
-
-        $conn->delete('tiskovina', array('ISSN' => $id));
-        $this->get('session')->getFlashBag()->add('ok', 'Tiskovina byla úspěšně smazána');
-        return $this->redirect($this->generateUrl('_bookList'));
+        $books = $conn->prepare($sql);
+        $books->execute();
+        
+        //$books = $conn->fetchAll('SELECT * FROM tiskovina ORDER BY titul ASC');
+        
+        return $this->render('DistribuceTiskuBundle:Form:booklist.html.twig', array('books' => $books, 'offset' => $offset));
     }
-    
+
     public function supplierAddAction() {
         if (($pom = $this->timeCheck(0)) != "") {
             return $this->render($pom);
@@ -227,16 +225,24 @@ class FormController extends UpperController {
                     'form' => $form->createView()
         ));
     }
-
-    public function supplierListAction() {
+    
+    public function supplierListAction($offset) {
         if (($pom = $this->timeCheck(1)) != "") {
             return $this->render($pom);
         }
-        $conn = $this->get('database_connection');
+        
+        $conn = $this->get('database_connection');        
+        $sql = "SELECT COUNT( * ) FROM `dodavatel` ";
+        $count = $conn->prepare($sql);
+        $count->execute();
         $sql = "SELECT * FROM `dodavatel`";
+        if($count > $offset){
+            $sql = $sql." LIMIT ".$offset." , 10";
+            $offset = $offset+10;
+        }
         $dodavatel = $conn->prepare($sql);
         $dodavatel->execute();
-        return $this->render('DistribuceTiskuBundle:Form:supplierList.html.twig', array('dodavatele' => $dodavatel));
+        return $this->render('DistribuceTiskuBundle:Form:supplierList.html.twig', array('dodavatele' => $dodavatel, 'offset' => $offset));
     }
 
     private function getSupplierSubsList($id) {
@@ -404,18 +410,25 @@ class FormController extends UpperController {
         ));
     }
 
-    private function getSubscriptionList($id = "") {
+    private function getSubscriptionList($id = "", $offset) {
         if (($pom = $this->timeCheck(2)) != "") {
             return $this->render($pom);
         }
         $conn = $this->get('database_connection');
+        
         if ($id != "") {
+            $sql = "SELECT COUNT( `odber`.`id_platby` ) FROM `odber` WHERE `odber`.`id_zakaznika`=" . $id;
+            $count = $conn->prepare($sql);
+            $count->execute();
             $sql = "SELECT `platby`.`obdobi`,`platby`.`zpusob_platby`,`odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
             $sql = $sql . "JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
             $sql = $sql . "JOIN `tiskovina` ON `odber`.`ISSN` = `tiskovina`.`ISSN` ";
             $sql = $sql . "JOIN `platby` ON `odber`.`id_platby` = `platby`.`id_platby` ";
             $sql = $sql . " WHERE `odber`.`id_zakaznika`=" . $id;
         } else {
+            $sql = "SELECT COUNT( `odber`.`id_platby` ) FROM `odber`";
+            $count = $conn->prepare($sql);
+            $count->execute();
             $sql = "SELECT `odber`.`id_odberu`, `odber`.`den_odberu`,`odber`.`odber_od`,`odber`.`odber_do`,`odber`.`id_platby`,`zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`tiskovina`.`titul`  FROM `odber`";
             $sql = $sql . "JOIN `zakaznik` ON `odber`.`id_zakaznika` = `zakaznik`.`id_zakaznika`";
             $sql = $sql . "JOIN `tiskovina` ON `odber`.`ISSN` = `tiskovina`.`ISSN` ";
@@ -423,17 +436,21 @@ class FormController extends UpperController {
 
 
         $sql = $sql . " ORDER BY `odber`.`id_odberu`";
+        if($count > $offset){
+            $sql = $sql." LIMIT ".$offset." , 10";
+            $offset = $offset+10;
+        }
         $odbery = $conn->prepare($sql);
         $odbery->execute();
-        return $odbery;
+    return array( 'odbery' => $odbery, 'offset' => $offset);
     }
 
-    public function subscriptionListAction() {
+    public function subscriptionListAction($offset) {
         if (($pom = $this->timeCheck(0)) != "") {
             return $this->render($pom);
         }
-        $odbery = $this->getSubscriptionList();
-        return $this->render('DistribuceTiskuBundle:Form:subscriptionList.html.twig', array('odbery' => $odbery));
+        $odbery = $this->getSubscriptionList("", $offset);
+        return $this->render('DistribuceTiskuBundle:Form:subscriptionList.html.twig', array('odbery' => $odbery['odbery'], 'offset' => $odbery['offset']));
     }
 
     public function subscriptionInterruptionAction($id) {
@@ -490,15 +507,26 @@ class FormController extends UpperController {
         return $this->redirect($this->generateUrl('_subscriptionList'));
     }
 
-    public function subscriptionInterruptionListAction($id) {
+    public function subscriptionInterruptionListAction($id, $offset) {
         if (($pom = $this->timeCheck(2)) != "") {
             return $this->render($pom);
         }
+        $request = $this->getRequest();
         $conn = $this->get('database_connection');
+        
+        $sql = "SELECT COUNT( * ) FROM `preruseni_odberu` ";
+        $count = $conn->prepare($sql);
+        $count->execute();
+        
         $sql = "SELECT `id_preruseni`, `preruseni_od`, `preruseni_do` FROM `preruseni_odberu` WHERE `id_odberu` = '" . $id . "'";
+        if($count > $offset){
+            $sql = $sql." LIMIT ".$offset." , 10";
+            $offset = $offset+10;
+        }
         $preruseni = $conn->prepare($sql);
         $preruseni->execute();
-        return $this->render('DistribuceTiskuBundle:Form:subscriptionInterruptionList.html.twig', array('interuptions' => $preruseni));
+        
+        return $this->render('DistribuceTiskuBundle:Form:subscriptionInterruptionList.html.twig', array('interuptions' => $preruseni, 'id' => $id, 'offset' => $offset));
     }
 
     public function subscriptionInteruptionDeleteAction($id) {
@@ -519,23 +547,33 @@ class FormController extends UpperController {
     //******************************************************************************
     //******************USER********************************************************
 
-    public function ubookListAction() {
+    public function ubookListAction($offset) {
         if (($pom = $this->timeCheck(2)) != "") {
             return $this->render($pom);
         }
         $conn = $this->get('database_connection');
-        $books = $conn->fetchAll('SELECT * FROM tiskovina ORDER BY titul ASC');
-        return $this->render('DistribuceTiskuBundle:Form:ubooklist.html.twig', array('books' => $books));
+        $sql = "SELECT COUNT(*) FROM tiskovina";
+        $count = $conn->prepare($sql);
+        $count->execute();
+        $sql = "SELECT * FROM tiskovina ORDER BY titul ASC";
+        if($count > $offset){
+            $sql = $sql." LIMIT ".$offset." , 10";
+            $offset = $offset+10;
+        }
+        $books = $conn->prepare($sql);
+        $books->execute();
+        return $this->render('DistribuceTiskuBundle:Form:ubooklist.html.twig', array('books' => $books, 'offset' => $offset));
     }
 
-    public function usubscriptionListAction() {
+    public function usubscriptionListAction($offset) {
         if (($pom = $this->timeCheck(2)) != "") {
             return $this->render($pom);
         }
         $session = $this->getRequest()->getSession();
-        $odbery = $this->getSubscriptionList($session->get('id'));
+        $odbery = $this->getSubscriptionList($session->get('id'), $offset);
         //$odbery = $this->getSubscriptionList();
-        return $this->render('DistribuceTiskuBundle:Form:usubscriptionList.html.twig', array('odbery' => $odbery));
+        return $this->render('DistribuceTiskuBundle:Form:subscriptionList.html.twig', array('odbery' => $odbery['odbery'], 'offset' => $odbery['offset']));
+        //return $this->render('DistribuceTiskuBundle:Form:usubscriptionList.html.twig', array('odbery' => $odbery));
     }
 
     public function usubscriptionAddAction() {
@@ -574,11 +612,12 @@ class FormController extends UpperController {
         $od = new \DateTime($subscription->getOdberOd());
         $do = new \DateTime($subscription->getOdberDo());
         $form = $this->makeSubscriptionForm($subscription, $od, $do);
+
         $request = $this->getRequest();
-        //$form->handleRequest($request);
-        if ($request->getMethod() == 'POST') {
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
             $c = $request->get("form");
-            $conn = $this->get('database_connection');
             $sql = "UPDATE `odber` SET `den_odberu` = '" . $c['denOdberu'] . "', `odber_od` = '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', `odber_do` = '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', `ISSN` = '" . $c['titul'] . "' WHERE `odber`.`id_odberu` = '" . $id . "'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();

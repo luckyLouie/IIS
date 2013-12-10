@@ -30,7 +30,9 @@
         <th>editovat</th>
         <th>smazat</th>
     </thead>
+    {% set lenght = 0 %}
     {% for dodavatel in dodavatele %}
+    {% set lenght = lenght+1 %}
     <tr>
         <td><a href="{{ path('_supplierEdit',{'id' : dodavatel.id_dodavatele} )}}">{{ dodavatel.id_dodavatele }}</a></td>
         <td>{{ dodavatel.jmeno }}</td>
@@ -44,5 +46,16 @@
     </tr>    
     {% endfor %}
 </table>
-        {% block mandatory %}{% endblock%}
+{% if offset-10 > 0 %}
+<a href="{{ path('_supplierList', {'offset' : offset-20} )}}"><-</a>
+ strana {{(offset/10)}}
+    {% if lenght == 10 %}
+<a href="{{ path('_supplierList', {'offset' : offset} )}}">-></a>
+    {% endif %}
+{% else %}
+    {% if lenght == 10 %}
+ strana {{(offset/10)}}
+<a href="{{ path('_supplierList', {'offset' : offset} )}}">-></a>
+    {% endif %}
+{% endif %}
 {% endblock %}

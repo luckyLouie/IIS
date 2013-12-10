@@ -20,4 +20,15 @@
         {% block formRest %}   
 
         {% endblock %}
-        {% block mandatory %}{% endblock%}
+        
+        {% block list1 %}
+<a href="{{ path('_usubscriptionEdit', {'offset' : offset-20} )}}">-></a>
+        {% endblock %}
+        
+        {% block list2 %}
+<a href="{{ path('_usubscriptionEdit', {'offset' : offset} )}}">-></a>
+        {% endblock %}
+
+        {% block list3 %}
+<a href="{{ path('_usubscriptionEdit', {'offset' : offset} )}}">-></a>
+        {% endblock %}
