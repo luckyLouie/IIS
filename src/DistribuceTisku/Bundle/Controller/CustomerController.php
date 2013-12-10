@@ -131,10 +131,9 @@ class CustomerController extends UpperController {
             $sql .= "psc='" . $c['psc'] . "', bankovni_spojeni='" . $c['bankovniSpojeni'] . "', kontaktni_udaj='" . $c['telefon'] . "' WHERE id_zakaznika=" . $id;
             $stmt = $conn->prepare($sql);
             $stmt->execute();
-
-            //nacteni nejnovejsich dat o uzivateli
             $customer = $this->getCustomerById($id);
-            $form = $this->createForm(new CustomerType(), $customer);
+            $form = $this->createForm(new CustomerType($suppliers, $areas), $customer);
+            //nacteni nejnovejsich dat o uzivateli
                     $this->get('session')->getFlashBag()->add('ok', 'Uprava zákazníka proběhla úspěšně'); 
             return $this->render('DistribuceTiskuBundle:Form:customeredit.html.twig', array(
             'form' => $form->createView()));
@@ -210,8 +209,9 @@ class CustomerController extends UpperController {
         $id = $this->customerNameToId($user);
         $customer = $this->getCustomerByName($user);
         //$customer->setLogin("login");
-
-        $form = $this->createForm(new CustomerType(), $customer);
+        $suppliers = $this->getSuppliers();
+        $areas = $this->getAreas();
+        $form = $this->createForm(new CustomerType($suppliers, $areas), $customer);
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $c = $request->get("customer");
@@ -224,7 +224,7 @@ class CustomerController extends UpperController {
 
             //nacteni nejnovejsich dat o uzivateli
             $customer = $this->getCustomerById($id);
-            $form = $this->createForm(new CustomerType(), $customer);
+            $form = $this->createForm(new CustomerType($suppliers, $areas), $customer);
             $this->get('session')->getFlashBag()->add('ok', 'Editace profilu byla úspěšná');
             return $this->render('DistribuceTiskuBundle:Form:profile.html.twig', array(
             'form' => $form->createView()));

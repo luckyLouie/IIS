@@ -2,5 +2,16 @@
 {% extends 'DistribuceTiskuBundle::layout.html.twig' %}
 
 {% block body %}
-    Blog homepage
+
+    {% for flashMessage in app.session.flashbag.get('ok') %}
+    <div class="blogger-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %}
+
+    {% for flashMessage in app.session.flashbag.get('exception') %}
+    <div class="exception-notice">
+    {{ flashMessage }}
+    </div>
+    {% endfor %} 
 {% endblock %}

@@ -188,14 +188,14 @@ class FormController extends UpperController {
         ));
     }
 
-    public function dprofileAction(){
-                if (($pom = $this->timeCheck(2)) != "") {
+    public function dprofileAction() {
+        if (($pom = $this->timeCheck(2)) != "") {
             return $this->render($pom);
-        }    
+        }
         $session = $this->getRequest()->getSession();
-            $id = $this->supplierNameToId($session->get('user'));
-                    $request = $this->getRequest();
-                               
+        $id = $this->supplierNameToId($session->get('user'));
+        $request = $this->getRequest();
+
         $suplier = new Supplier();
         $conn = $this->get('database_connection');
         $sql = "SELECT * FROM `dodavatel` WHERE id_dodavatele = '" . $id . "'";
@@ -278,12 +278,12 @@ class FormController extends UpperController {
         }
         $session = $this->getRequest()->getSession();
 
-            $id = $this->supplierNameToId($session->get('user'));
-            
+        $id = $this->supplierNameToId($session->get('user'));
+
         $odbery = $this->getSupplierSubsList($id);
         return $this->render('DistribuceTiskuBundle:Form:dsupplierSubsList.html.twig', array('odbery' => $odbery));
-    }    
-    
+    }
+
     public function supplierDeleteAction($id) {
         if (($pom = $this->timeCheck(0)) != "") {
             return $this->render($pom);
@@ -294,7 +294,30 @@ class FormController extends UpperController {
         return $this->redirect($this->generateUrl('_supplierList'));
     }
 
-    function makeSubscriptionForm($subscription) {
+    private function getSubscripsionById($id) {
+        $subscription = new Subscription();
+        $conn = $this->get('database_connection');
+        $sql = "SELECT * FROM `odber` WHERE id_odberu = '" . $id . "'";
+        $odbery = $conn->prepare($sql);
+        $odbery->execute();
+        foreach ($odbery as $odber) {
+            $subscription->setUzivatel($odber['id_zakaznika']);
+            $subscription->setDenOdberu($odber['den_odberu']);
+            $subscription->setZakaznik($odber['id_zakaznika']);
+            $subscription->setTitul($odber['ISSN']);
+            $subscription->setIssn($odber['ISSN']);
+            $subscription->setId($id);
+            $subscription->setOdberOd($odber['odber_od']);
+            $subscription->setOdberDo($odber['odber_do']);
+        }
+        return $subscription;
+    }
+
+    function makeSubscriptionForm($subscription, $od = NULL, $do = NULL) {
+        $currDate = new \DateTime();
+        //$currDate = $date->format('yyyy-MM-dd');
+        $od = ($od == NULL) ? $currDate : $od;
+        $do = ($do == NULL) ? $currDate : $do;
         $conn = $this->get('database_connection');
         $uzivatele = $conn->fetchAll('SELECT `jmeno`, `id_zakaznika` FROM `zakaznik`');
 
@@ -320,14 +343,14 @@ class FormController extends UpperController {
                         'Neděle' => 'Neděle'
             )))
                 ->add('odberOd', 'date', array(
-                    'input' => 'timestamp',
-                    'widget' => 'choice',
-                    'format' => 'yyyy-MM-dd'
+                    'format' => 'yyyy-MM-dd',
+                    'years' => range(Date('Y'), 2020),
+                    'data' => $od
                 ))
                 ->add('odberDo', 'date', array(
-                    'input' => 'timestamp',
-                    'widget' => 'choice',
-                    'format' => 'yyyy-MM-dd'
+                    'format' => 'yyyy-MM-dd',
+                    'years' => range(Date('Y'), 2020),
+                    'data' => $do
                 ))
                 ->add('titul', 'choice', array('choices' => $titul))
                 ->getForm();
@@ -339,7 +362,7 @@ class FormController extends UpperController {
             return $this->render($pom);
         }
         $subscription = new Subscription();
-        $subscription->setOdberDo(2013);
+
         $form = $this->makeSubscriptionForm($subscription);
         $request = $this->getRequest();
         $form->handleRequest($request);
@@ -364,24 +387,15 @@ class FormController extends UpperController {
         if (($pom = $this->timeCheck(0)) != "") {
             return $this->render($pom);
         }
-        $subscription = new Subscription();
-        $conn = $this->get('database_connection');
-        $sql = "SELECT * FROM `odber` WHERE id_odberu = '" . $id . "'";
-        $odbery = $conn->prepare($sql);
-        $odbery->execute();
-        foreach ($odbery as $odber) {
-            $subscription->setUzivatel($odber['id_zakaznika']);
-            $subscription->setDenOdberu($odber['den_odberu']);
-            $subscription->setZakaznik($odber['id_zakaznika']);
-            $subscription->setTitul($odber['ISSN']);
-            $subscription->setIssn($odber['ISSN']);
-            $subscription->setId($id);
-        }
-        $form = $this->makeSubscriptionForm($subscription);
+        $subscription = $this->getSubscripsionById($id);
+        $od = new \DateTime($subscription->getOdberOd());
+        $do = new \DateTime($subscription->getOdberDo());
+        $form = $this->makeSubscriptionForm($subscription, $od, $do);
         $request = $this->getRequest();
-        $form->handleRequest($request);
+        //$form->handleRequest($request);
+        if ($request->getMethod() == 'POST') {
 
-        if ($form->isValid()) {
+            $conn = $this->get('database_connection');
             $c = $request->get("form");
             $sql = "UPDATE `odber` SET `den_odberu` = '" . $c['denOdberu'] . "', `odber_od` = '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', `odber_do` = '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', `id_zakaznika` = '" . $c['uzivatel'] . "', `ISSN` = '" . $c['titul'] . "' WHERE `odber`.`id_odberu` = '" . $id . "'";
             $stmt = $conn->prepare($sql);
@@ -447,14 +461,14 @@ class FormController extends UpperController {
         $interuption->setId($id);
         $form = $this->createFormBuilder($interuption)
                 ->add('od', 'date', array(
-                    'input' => 'timestamp',
-                    'widget' => 'choice',
-                    'format' => 'yyyy-MM-dd'
+                    'format' => 'yyyy-MM-dd',
+                    'data' => new \DateTime(),
+                    'years' => range(Date('Y'), 2020)
                 ))
                 ->add('do', 'date', array(
-                    'input' => 'timestamp',
-                    'widget' => 'choice',
-                    'format' => 'yyyy-MM-dd'
+                    'format' => 'yyyy-MM-dd',
+                    'data' => new \DateTime(),
+                    'years' => range(Date('Y'), 2020)
                 ))
                 ->getForm();
 
@@ -463,7 +477,7 @@ class FormController extends UpperController {
             $form->bind($request);
 
             if ($form->isValid()) {
-                $c = $request->get("interuption");
+                $c = $request->get("form");
                 $conn = $this->get('database_connection');
 
                 $sql = "INSERT INTO `preruseni_odberu` (`preruseni_od`, `preruseni_do`, `id_odberu`) VALUES ('" . $c['od']['year'] . "-" . $c['od']['month'] . "-" . $c['od']['day'] . "', '" . $c['do']['year'] . "-" . $c['do']['month'] . "-" . $c['do']['day'] . "', '" . $id . "')";
@@ -594,20 +608,11 @@ class FormController extends UpperController {
         if (($pom = $this->timeCheck(2)) != "") {
             return $this->render($pom);
         }
-        $subscription = new Subscription();
-        $conn = $this->get('database_connection');
-        $sql = "SELECT * FROM `odber` WHERE id_odberu = '" . $id . "'";
-        $odbery = $conn->prepare($sql);
-        $odbery->execute();
-        foreach ($odbery as $odber) {
-            $subscription->setUzivatel($odber['id_zakaznika']);
-            $subscription->setDenOdberu($odber['den_odberu']);
-            $subscription->setZakaznik($odber['id_zakaznika']);
-            $subscription->setTitul($odber['ISSN']);
-            $subscription->setIssn($odber['ISSN']);
-            $subscription->setId($id);
-        }
-        $form = $this->makeSubscriptionForm($subscription);
+        $subscription = $this->getSubscripsionById($id);
+        $od = new \DateTime($subscription->getOdberOd());
+        $do = new \DateTime($subscription->getOdberDo());
+        $form = $this->makeSubscriptionForm($subscription, $od, $do);
+
         $request = $this->getRequest();
         $form->handleRequest($request);
 
