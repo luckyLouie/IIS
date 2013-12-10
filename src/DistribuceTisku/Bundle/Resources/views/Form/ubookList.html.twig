@@ -10,3 +10,13 @@
         {% block adminOnlyTd %}
 
         {% endblock %}
+
+{% block list1 %}
+<a href="{{ path('_ubookList', {'offset' : offset-20} )}}"><-</a>
+{% endblock %}
+{% block list2 %}
+<a href="{{ path('_ubookList', {'offset' : offset} )}}">-></a>
+{% endblock %}
+ {% block list3 %}
+<a href="{{ path('_ubookList', {'offset' : offset} )}}">-></a>
+{% endblock %}

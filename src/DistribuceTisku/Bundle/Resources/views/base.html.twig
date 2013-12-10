@@ -54,16 +54,16 @@
                 {% if app.session.get('type') == "0" %}  
                 <ul>
                     <li><a href="{{ path('_customerAdd')}}">Přidat zákazníka</a></li>
-                    <li><a href="{{ path('_customerList')}}">Seznam zákazníků</a></li>
+                    <li><a href="{{ path('_customerList', {'offset' : 0})}}">Seznam zákazníků</a></li>
                     <hr>
                     <li><a href="{{ path('_bookAdd')}}">Přidat tiskovinu</a></li>
-                    <li><a href="{{ path('_bookList')}}">Seznam tiskovin</a></li>
+                    <li><a href="{{ path('_bookList', {'offset' : 0})}}">Seznam tiskovin</a></li>
                     <hr>
                     <li><a href="{{ path('_supplierAdd')}}">Přidat doručovatele</a></li>
-                    <li><a href="{{ path('_supplierList')}}">Prohlížet doručovatele</a></li>
+                    <li><a href="{{ path('_supplierList', {'offset' : 0})}}">Prohlížet doručovatele</a></li>
                     <hr>
                     <li><a href="{{ path('_subscriptionAdd')}}">Zadat odběr</a></li>
-                    <li><a href="{{ path('_subscriptionList')}}">Prohlížet odběry</a></li>
+                    <li><a href="{{ path('_subscriptionList', {'offset' : 0})}}">Prohlížet odběry</a></li>
                 </ul>
                 {% elseif app.session.get('type') == "1" %}
                 <ul>
@@ -72,10 +72,10 @@
                 </ul>
                 {% elseif app.session.get('type') == "2" %}
                 <ul>
-                    <li><a href="{{ path('_ubookList')}}">Seznam tiskovin</a></li>
+                    <li><a href="{{ path('_ubookList', {'offset' : 0})}}">Seznam tiskovin</a></li>
                     <hr>
                     <li><a href="{{ path('_usubscriptionAdd')}}">Zadat odběr</a></li>
-                    <li><a href="{{ path('_usubscriptionList')}}">Prohlížet odběry</a></li>
+                    <li><a href="{{ path('_usubscriptionList', {'offset' : 0})}}">Prohlížet odběry</a></li>
                     <hr>
                     <li><a href="{{ path('_profile')}}">Upravit profil</a></li>
                 </ul>

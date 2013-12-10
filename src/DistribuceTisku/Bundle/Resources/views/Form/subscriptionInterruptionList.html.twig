@@ -26,7 +26,9 @@
         <th>Přerušení do</th>
         <th>Odstranit</th>
     </thead>
+    {% set lenght = 0 %}
     {% for interupt in interuptions %}
+    {% set lenght = lenght+1 %}
     <tr>
         <td>{{ interupt.preruseni_od }}</td>
         <td>{{ interupt.preruseni_do }}</td>
@@ -34,4 +36,16 @@
     </tr>    
     {% endfor %}
 </table>
+{% if offset-10 > 0 %}
+<a href="{{ path('_subscriptionInterruptionList', {'id' : id, 'offset' : offset-20} )}}"><-</a>
+ strana {{(offset/10)}}
+    {% if lenght == 10 %}
+<a href="{{ path('_subscriptionInterruptionList', {'id' : id, 'offset' : offset} )}}">-></a>
+    {% endif %}
+{% else %}
+    {% if lenght == 10 %}
+ strana {{(offset/10)}}
+<a href="{{ path('_subscriptionInterruptionList', {'id' : id, 'offset' : offset} )}}">-></a>
+    {% endif %}
+{% endif %}
 {% endblock %}

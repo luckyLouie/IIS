@@ -32,7 +32,9 @@
         <th>editovat</th>
         {% endblock %}
     </thead>
+    {% set lenght = 0 %}
     {% for book in books %}
+    {% set lenght = lenght+1 %}
     <tr>
         <td>{{ book.ISSN }}</td>
         <td>{{ book.titul }}</td>
@@ -47,4 +49,22 @@
     </tr>    
     {% endfor %}
 </table>
+{% if offset-10 > 0 %}
+{% block list1 %}
+<a href="{{ path('_bookList', {'offset' : offset-20} )}}"><-</a>
+{% endblock %}
+ strana {{(offset/10)}}
+    {% if lenght == 10 %}
+ {% block list2 %}
+<a href="{{ path('_bookList', {'offset' : offset} )}}">-></a>
+{% endblock %}
+    {% endif %}
+{% else %}
+    {% if lenght == 10 %}
+ strana {{(offset/10)}}
+ {% block list3 %}
+<a href="{{ path('_bookList', {'offset' : offset} )}}">-></a>
+{% endblock %}
+    {% endif %}
+{% endif %}
 {% endblock %}

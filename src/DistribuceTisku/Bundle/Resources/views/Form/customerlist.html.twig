@@ -31,7 +31,9 @@
         <th>smazat</th>
         <th>editovat</th>
     </thead>
+    {% set lenght = 0 %}
     {% for zakaznik in zakaznici %}
+    {% set lenght = lenght+1 %}
     <tr>
         <td><a href="{{ path('_customerEditById',{'id' : zakaznik.id_zakaznika} )}}">{{ zakaznik.id_zakaznika }}</a></td>
         <td>{{ zakaznik.jmeno }}</td>
@@ -46,4 +48,16 @@
     </tr>    
     {% endfor %}
 </table>
+{% if offset-10 > 0 %}
+<a href="{{ path('_customerList', {'offset' : offset-20} )}}"><-</a>
+ strana {{(offset/10)}}
+    {% if lenght == 10 %}
+<a href="{{ path('_customerList', {'offset' : offset} )}}">-></a>
+    {% endif %}
+{% else %}
+    {% if lenght == 10 %}
+ strana {{(offset/10)}}
+<a href="{{ path('_customerList', {'offset' : offset} )}}">-></a>
+    {% endif %}
+{% endif %}
 {% endblock %}

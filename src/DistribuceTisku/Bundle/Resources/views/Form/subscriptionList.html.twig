@@ -36,7 +36,9 @@
         <th>Seznam přerušení</th>
         <th>smazat</th>
     </thead>
+    {% set lenght = 0 %}
     {% for odber in odbery %}
+    {% set lenght = lenght+1 %}
     <tr>        
         <td>{{ odber.id_odberu }}</td>
         <td>{{ odber.titul }}</td>
@@ -52,9 +54,27 @@
         <td><a href="{{ path('_subscriptionEdit',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/edit.png') }}" alt="změnit odběr" width="20" height="20"></a></td>
         {% endblock %}
         <td><a href="{{ path('_subscriptionInterruption',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/interrupt.png') }}" alt="přerušit odběr" width="20" height="20"></a></td>
-        <td><a href="{{ path('_subscriptionInterruptionList',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/interrupt.png') }}" alt="preušené odběry" width="20" height="20"></a></td>
+        <td><a href="{{ path('_subscriptionInterruptionList',{'id' : odber.id_odberu, 'offset' : 0} )}}"><img src="{{ asset('images/interrupt.png') }}" alt="preušené odběry" width="20" height="20"></a></td>
         <td><a href="{{ path('_subscriptionRemove',{'id' : odber.id_odberu} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat odběr" width="20" height="20"></a></td>
     </tr>    
     {% endfor %}
 </table>
+{% if offset-10 > 0 %}
+{% block list1 %}
+<a href="{{ path('_subscriptionList', {'offset' : offset-20} )}}"><-</a>
+{% endblock %}
+ strana {{(offset/10)}}
+    {% if lenght == 10 %}
+ {% block list2 %}
+<a href="{{ path('_subscriptionList', {'offset' : offset} )}}">-></a>
+{% endblock %}
+    {% endif %}
+{% else %}
+    {% if lenght == 10 %}
+ strana {{(offset/10)}}
+ {% block list3 %}
+<a href="{{ path('_subscriptionList', {'offset' : offset} )}}">-></a>
+{% endblock %}
+    {% endif %}
+{% endif %}
 {% endblock %}

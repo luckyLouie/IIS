@@ -164,15 +164,27 @@ class CustomerController extends UpperController {
         ));
     }
 
-    public function customerListAction() {
+    public function customerListAction($offset) {
         if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             
         }
         $conn = $this->get('database_connection');
-        $zakaznici = $conn->fetchAll('SELECT `zakaznik`.`id_zakaznika` , `oblast`.`nazev`, `oblast`.`psc`,`oblast`.`posta`, `zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`zakaznik`.`titul`,`zakaznik`.`adresa`,`zakaznik`.`bankovni_spojeni`,`zakaznik`.`kontaktni_udaj`      FROM zakaznik JOIN `oblast` ON `oblast`.`id_oblast` = `zakaznik`.`psc` ORDER BY id_zakaznika ASC');
-        return $this->render('DistribuceTiskuBundle:Form:customerlist.html.twig', array('zakaznici' => $zakaznici));
+        
+        $sql = "SELECT COUNT( * ) FROM `zakaznik` ";
+        $count = $conn->prepare($sql);
+        $count->execute();
+        
+        $sql = "SELECT `zakaznik`.`id_zakaznika` , `oblast`.`nazev`, `oblast`.`psc`,`oblast`.`posta`, `zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`zakaznik`.`titul`,`zakaznik`.`adresa`,`zakaznik`.`bankovni_spojeni`,`zakaznik`.`kontaktni_udaj`      FROM zakaznik JOIN `oblast` ON `oblast`.`id_oblast` = `zakaznik`.`psc` ORDER BY id_zakaznika ASC";
+        if($count > $offset){
+            $sql = $sql." LIMIT ".$offset." , 10";
+            $offset = $offset+10;
+        }
+        $zakaznici = $conn->prepare($sql);
+        $zakaznici->execute();
+        //$zakaznici = $conn->fetchAll('SELECT `zakaznik`.`id_zakaznika` , `oblast`.`nazev`, `oblast`.`psc`,`oblast`.`posta`, `zakaznik`.`jmeno`,`zakaznik`.`prijmeni`,`zakaznik`.`titul`,`zakaznik`.`adresa`,`zakaznik`.`bankovni_spojeni`,`zakaznik`.`kontaktni_udaj`      FROM zakaznik JOIN `oblast` ON `oblast`.`id_oblast` = `zakaznik`.`psc` ORDER BY id_zakaznika ASC');
+        return $this->render('DistribuceTiskuBundle:Form:customerlist.html.twig', array('zakaznici' => $zakaznici, 'offset' => $offset));
     }
 
     public function customerRemoveByIdAction($id) {
@@ -183,14 +195,14 @@ class CustomerController extends UpperController {
         return $this->redirect($this->generateUrl('_customerList'));
     }
 
-    // pouziva se to?
-    public function customerRemoveAction() {
+    // pouziva se to? kdo vi? ale je to hodne nesmyslne ... testnu koment :D
+    /*public function customerRemoveAction() {
         if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
         $conn = $this->get('database_connection');
         $this->get('session')->getFlashBag()->add('ok', 'Odstranění zákazníka proběhlo úspěšně');
         return $this->redirect($this->generateUrl('_customerList'));
         ;
-    }
+    }*/
 
     public function profileAction() {
        if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
