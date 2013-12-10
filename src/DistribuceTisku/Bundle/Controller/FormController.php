@@ -71,12 +71,12 @@ class FormController extends UpperController {
             $c = $request->get("titul");
             $conn = $this->get('database_connection');
 //cena 	titul 	den_vydani 	nakladatelstvi 	vydavatel
-            $sql = "UPDATE `tiskovina` SET cena='" . $c['cena'] . "', den_vydani='" . $c['denVydani'] . "', ";
+            $sql = "UPDATE `tiskovina` SET titul='" . $c['titul'] . "',issn='" . $c['issn'] . "',cena='" . $c['cena'] . "', den_vydani='" . $c['denVydani'] . "', ";
             $sql .= "nakladatelstvi='" . $c['nakladatelstvi'] . "', vydavatel='" . $c['vydavatel'] . "' , typ='" . $c['typ'] . "' WHERE ISSN='" . $id . "'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $this->get('session')->getFlashBag()->add('ok', 'Titul byl uspesne upraven.');
-            return $this->redirect($this->generateUrl('_bookList'));
+            return $this->redirect($this->generateUrl('_bookList', array( 'offset'=>'0')));
         }
         return $this->render('DistribuceTiskuBundle:Form:bookedit.html.twig', array(
                     'form' => $form->createView()
@@ -104,6 +104,17 @@ class FormController extends UpperController {
         //$books = $conn->fetchAll('SELECT * FROM tiskovina ORDER BY titul ASC');
         
         return $this->render('DistribuceTiskuBundle:Form:booklist.html.twig', array('books' => $books, 'offset' => $offset));
+    }
+    
+        public function bookDeleteByIdAction($id) {
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
+        $conn = $this->get('database_connection');
+        
+        $conn->delete('tiskovina', array('ISSN' => $id));
+        $this->get('session')->getFlashBag()->add('ok', 'Tiskovina byla úspěšně smazána');
+        return $this->redirect($this->generateUrl('_bookList', array('offset'=>'0')));
     }
 
     public function supplierAddAction() {
@@ -180,11 +191,11 @@ class FormController extends UpperController {
             $stmt->execute();
 
             $this->get('session')->getFlashBag()->add('ok', 'Editace dodavatele byla úspěšná');
-            return $this->redirect($this->generateUrl('_supplierList'));
+            return $this->redirect($this->generateUrl('_supplierList',array('offset'=>'0')));
         }
 
         return $this->render('DistribuceTiskuBundle:Form:supplierEdit.html.twig', array(
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
         ));
     }
 
@@ -291,7 +302,7 @@ class FormController extends UpperController {
         $conn = $this->get('database_connection');
         $conn->delete('dodavatel', array('id_dodavatele' => $id));
         $this->get('session')->getFlashBag()->add('ok', 'Doručovatel byl úspěšně smazán');
-        return $this->redirect($this->generateUrl('_supplierList'));
+        return $this->redirect($this->generateUrl('_supplierList',array('offset'=>'0')));
     }
 
     private function getSubscripsionById($id) {
@@ -402,7 +413,7 @@ class FormController extends UpperController {
             $stmt->execute();
 
             $this->get('session')->getFlashBag()->add('ok', 'Editace odběru byla úspěšná');
-            return $this->redirect($this->generateUrl('_subscriptionList'));
+            return $this->redirect($this->generateUrl('_subscriptionList', array('offset' => '0') ));
         }
 
         return $this->render('DistribuceTiskuBundle:Form:subscriptionEdit.html.twig', array(
@@ -487,9 +498,9 @@ class FormController extends UpperController {
                 $this->get('session')->getFlashBag()->add('ok', 'Nové přerušení bylo nastaveno');
                 $session = $this->getRequest()->getSession();
                 if ($session->get('type') == 2)
-                    return $this->redirect($this->generateUrl('_usubscriptionList'));
+                    return $this->redirect($this->generateUrl('_usubscriptionList', array('offset' => '0') ));
                 else
-                    return $this->redirect($this->generateUrl('_subscriptionList'));
+                    return $this->redirect($this->generateUrl('_subscriptionList', array('offset' => '0') ));
             }
         }
         return $this->render('DistribuceTiskuBundle:Form:subscriptionInterruption.html.twig', array(
@@ -504,7 +515,7 @@ class FormController extends UpperController {
         $conn = $this->get('database_connection');
         $conn->delete('odber', array('id_odberu' => $id));
         $conn->delete('preruseni_odberu', array('id_odberu' => $id));
-        return $this->redirect($this->generateUrl('_subscriptionList'));
+        return $this->redirect($this->generateUrl('_subscriptionList', array('offset' => '0') ));
     }
 
     public function subscriptionInterruptionListAction($id, $offset) {
@@ -541,7 +552,7 @@ class FormController extends UpperController {
         $preruseni = $conn->prepare($sql);
         $preruseni->execute();
 
-        return $this->render('DistribuceTiskuBundle:Form:subscriptionInterruptionList.html.twig', array('interuptions' => $preruseni));
+        return $this->render('DistribuceTiskuBundle:Form:subscriptionInterruptionList.html.twig', array('interuptions' => $preruseni, 'offset'=> '0'));
     }
 
     //******************************************************************************
@@ -572,7 +583,7 @@ class FormController extends UpperController {
         $session = $this->getRequest()->getSession();
         $odbery = $this->getSubscriptionList($session->get('id'), $offset);
         //$odbery = $this->getSubscriptionList();
-        return $this->render('DistribuceTiskuBundle:Form:subscriptionList.html.twig', array('odbery' => $odbery['odbery'], 'offset' => $odbery['offset']));
+        return $this->render('DistribuceTiskuBundle:Form:usubscriptionList.html.twig', array('odbery' => $odbery['odbery'], 'offset' => $odbery['offset']));
         //return $this->render('DistribuceTiskuBundle:Form:usubscriptionList.html.twig', array('odbery' => $odbery));
     }
 
@@ -614,16 +625,17 @@ class FormController extends UpperController {
         $form = $this->makeSubscriptionForm($subscription, $od, $do);
 
         $request = $this->getRequest();
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
+        //$form->handleRequest($request);
+        if ($request->getMethod() == 'POST') {
             $c = $request->get("form");
+            $conn = $this->get('database_connection');
             $sql = "UPDATE `odber` SET `den_odberu` = '" . $c['denOdberu'] . "', `odber_od` = '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', `odber_do` = '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', `ISSN` = '" . $c['titul'] . "' WHERE `odber`.`id_odberu` = '" . $id . "'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
             $this->get('session')->getFlashBag()->add('ok', 'Editace odběru byla úspěšná');
-            return $this->redirect($this->generateUrl('_usubscriptionList'));
+            return $this->redirect($this->generateUrl('_usubscriptionList', array('offset' => '0') ));
+            
         }
 
         return $this->render('DistribuceTiskuBundle:Form:usubscriptionEdit.html.twig', array(

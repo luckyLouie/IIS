@@ -201,7 +201,7 @@ class CustomerController extends UpperController {
         $conn = $this->get('database_connection');
         $conn->delete('zakaznik', array('id_zakaznika' => $id));
         $this->get('session')->getFlashBag()->add('ok', 'Odstranění zákazníka proběhlo úspěšně');
-        return $this->redirect($this->generateUrl('_customerList'));
+        return $this->redirect($this->generateUrl('_customerList', array('offset' => '0')));
     }
 
     // pouziva se to? kdo vi? ale je to hodne nesmyslne ... testnu koment :D

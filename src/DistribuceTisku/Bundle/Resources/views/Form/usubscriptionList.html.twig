@@ -8,17 +8,17 @@
 
         {% block formHead %}
         <form action="{{ path('_usubscriptionEdit',{'id' : form.vars.value.id}) }}" method="post" {{ form_enctype(form) }} class="blogger">
-        {% endblock %}
+
         {% block adminOnlyTd %}
          <td>{{ odber.obdobi }}</td>    
         <td>{{ odber.zpusob_platby }}</td>
         {% endblock %}
+        
         {% block userList %}
         <td><a href="{{ path('_usubscriptionEdit',{'id' : odber.id_odberu } )}}"><img src="{{ asset('images/edit.png') }}" alt="změnit odběr" width="20" height="20"></a></td>
         {% endblock %}
 
         {% block formRest %}   
-
         {% endblock %}
         
         {% block list1 %}
@@ -32,3 +32,7 @@
         {% block list3 %}
 <a href="{{ path('_usubscriptionEdit', {'offset' : offset} )}}">-></a>
         {% endblock %}
+
+{% block mandatory %}{% endblock%}       
+
+ {% endblock %}
