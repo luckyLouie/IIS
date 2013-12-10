@@ -8,7 +8,7 @@
     {{ flashMessage }}
     </div>
     {% endfor %}
-
+                {% block mandatory %}{% endblock%}
     {% for flashMessage in app.session.flashbag.get('exception') %}
     <div class="exception-notice">
     {{ flashMessage }}

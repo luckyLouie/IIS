@@ -28,8 +28,8 @@
         <th>psč</th>
         <th>bankovní spojení</th>
         <th>kontaktní údaj</th>
+        <th>editovat</th>      
         <th>smazat</th>
-        <th>editovat</th>
     </thead>
     {% for zakaznik in zakaznici %}
     <tr>
@@ -41,9 +41,11 @@
         <td>{{ zakaznik.psc }}, {{ zakaznik.nazev }}, {{ zakaznik.posta }}</td>
         <td>{{ zakaznik.bankovni_spojeni }}</td>
         <td>{{ zakaznik.kontaktni_udaj }}</td>
-        <td><a href="{{ path('_customerRemoveById',{'id' : zakaznik.id_zakaznika} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat zakaznika" width="20" height="20"></a></td>
         <td><a href="{{ path('_customerEditById',{'id' : zakaznik.id_zakaznika} )}}"><img src="{{ asset('images/edit.jpg') }}" alt="editovat zakaznika" width="20" height="20"></a></td>
+        <td><a href="{{ path('_customerRemoveById',{'id' : zakaznik.id_zakaznika} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat zakaznika" width="20" height="20"></a></td>
     </tr>    
     {% endfor %}
 </table>
+
+        {% block mandatory %}{% endblock%}
 {% endblock %}

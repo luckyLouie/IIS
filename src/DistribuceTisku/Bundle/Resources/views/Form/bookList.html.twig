@@ -23,13 +23,14 @@
     <thead>
         <th>ISSN</th>
         <th>titul</th>
-        <th>cena</th>
+        <th>cena [kč]</th>
         <th>typ</th>
         <th>den vydání</th>
         <th>nakladatelstvi</th>
         <th>vydavatel</th>
         {% block adminOnlyTh %}
         <th>editovat</th>
+        <th>smazat</th>
         {% endblock %}
     </thead>
     {% for book in books %}
@@ -42,9 +43,11 @@
         <td>{{ book.nakladatelstvi }}</td>
         <td>{{ book.vydavatel }}</td>
         {% block adminOnlyTd %}
-        <td><a href="{{ path('_bookEdit',{'id' : book.ISSN} )}}"><img src="{{ asset('images/edit.jpg') }}" alt="editovat zakaznika" width="20" height="20"></a></td>
+        <td><a href="{{ path('_bookEdit',{'id' : book.ISSN} )}}"><img src="{{ asset('images/edit.jpg') }}" alt="editovat tiskovinu" width="20" height="20"></a></td>
+        <td><a href="{{ path('_bookDeleteById',{'id' : book.ISSN} )}}"><img src="{{ asset('images/delete.png') }}" alt="smazat tiskovinu" width="20" height="20"></a></td>
         {% endblock %}
     </tr>    
     {% endfor %}
 </table>
+        {% block mandatory %}{% endblock%}
 {% endblock %}

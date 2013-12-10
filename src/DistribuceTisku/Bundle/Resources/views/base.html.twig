@@ -48,6 +48,7 @@
 
             <section class="main-col">
                 {% block body %}{% endblock %}
+                {% block mandatory %} <p style="margin-top: 15px;"><strong>Povinná pole jsou označena *. </strong></p>{% endblock%}
             </section>
             <aside class="sidebar">
                 {% block sidebar %}{% endblock %}
@@ -81,7 +82,6 @@
                 </ul>
                 {% endif %}
             </aside>
-
             <div id="footer">
                 {% block footer %}
                 {% endblock %}

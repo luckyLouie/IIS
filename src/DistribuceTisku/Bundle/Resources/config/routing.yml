@@ -71,6 +71,7 @@ _customerRemoveById:
     requirements:   
         _method: GET|POST        
 
+        
 _customerList:    
     pattern:  /customerList
     defaults: { _controller: DistribuceTiskuBundle:Customer:customerList }
@@ -93,8 +94,14 @@ _bookList:
     pattern:  /bookList
     defaults: { _controller: DistribuceTiskuBundle:Form:bookList }
     requirements:   
-        _method: GET|POST        
-         
+        _method: GET|POST  
+        
+_bookDeleteById:
+    pattern:  /bookDeleteById/{id}
+    defaults: { _controller: DistribuceTiskuBundle:Form:bookDeleteById }
+    requirements:   
+        _method: GET|POST 
+
 _ubookList:
     pattern:  /ubookList
     defaults: { _controller: DistribuceTiskuBundle:Form:ubookList }

@@ -10,7 +10,7 @@ class BookType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('issn', null, array('label' => '*ISSN'));
         $builder->add('titul', null, array('label' => '*Titul'));
-        $builder->add('cena', null, array('label' => '*Cena'));
+        $builder->add('cena', null, array('label' => '*Cena [kč]'));
         $builder->add('typ', 'choice', array('choices' => array(
         'deník' => 'deník',
         'týdeník' => 'týdeník',

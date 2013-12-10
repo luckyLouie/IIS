@@ -47,7 +47,9 @@ class CustomerController extends UpperController {
     }
 
     public function customerAddAction() {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $customer = new Customer();
         $suppliers = $this->getSuppliers();
         $areas = $this->getAreas();
@@ -58,11 +60,11 @@ class CustomerController extends UpperController {
             $form->bind($request);
 
             if ($form->isValid()) {
-                try{
+                try {
                     $c = $request->get("customer");
 
                     //$conn = $this->get('database_connection');
-                    $conn->beginTransaction();        
+                    $conn->beginTransaction();
                     $sql = "INSERT INTO `zakaznik` (`id_zakaznika`, `jmeno`, `prijmeni`, `titul`, `adresa`, `psc`, `bankovni_spojeni`, `kontaktni_udaj`, `id_dodavatele`) VALUES (NULL, '" . $c['jmeno'] . "', '" . $c['prijmeni'] . "', '" . $c['titul'] . "', '" . $c['adresa'] . "', '" . $c['psc'] . "', '" . $c['bankovniSpojeni'] . "', '" . $c['telefon'] . "', '" . $c['dodavatel'] . "')";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute();
@@ -78,13 +80,13 @@ class CustomerController extends UpperController {
                     $sql = "INSERT INTO `users` (`user_id`, `passwd`, `type`, `person_id`) VALUES ('" . $c['login'] . "', '" . $c['password']['heslo'] . "', '2', '" . $id . "')";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute();
-                    $conn->commit();    
+                    $conn->commit();
                     $this->get('session')->getFlashBag()->add('ok', 'Nový zákazník byl úspěšně vložen');
                     return $this->redirect($this->generateUrl('_customerAdd'));
-                }catch(\Exception $e){
+                } catch (\Exception $e) {
                     $this->get('session')->getFlashBag()->add('exception', 'Vyskytla se chyba pri vytvareni noveho zakaznika.');
                     return $this->render('DistribuceTiskuBundle:Form:customeradd.html.twig', array(
-            'form' => $form->createView() ));
+                                'form' => $form->createView()));
                 }
             }
         }
@@ -95,7 +97,9 @@ class CustomerController extends UpperController {
 
     // pouziva se to?? NOPE
     public function customerEditAction() {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $user = $this->getRequest()->getSession()->get("user");
         $customer = $this->getCustomerByName($user);
         //$customer->setLogin("login");
@@ -103,7 +107,7 @@ class CustomerController extends UpperController {
         $suppliers = $this->getSuppliers();
         $areas = $this->getAreas();
         $form = $this->createForm(new CustomerType($suppliers, $areas), $customer);
-        
+
 
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
@@ -117,7 +121,9 @@ class CustomerController extends UpperController {
     }
 
     public function customerEditByIdAction($id) {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $customer = $this->getCustomerById($id);
         $suppliers = $this->getSuppliers();
         $areas = $this->getAreas();
@@ -134,9 +140,9 @@ class CustomerController extends UpperController {
             $customer = $this->getCustomerById($id);
             $form = $this->createForm(new CustomerType($suppliers, $areas), $customer);
             //nacteni nejnovejsich dat o uzivateli
-                    $this->get('session')->getFlashBag()->add('ok', 'Uprava zákazníka proběhla úspěšně'); 
+            $this->get('session')->getFlashBag()->add('ok', 'Uprava zákazníka proběhla úspěšně');
             return $this->render('DistribuceTiskuBundle:Form:customeredit.html.twig', array(
-            'form' => $form->createView()));
+                        'form' => $form->createView()));
         }
         return $this->render('DistribuceTiskuBundle:Form:customeredit.html.twig', array(
                     'form' => $form->createView()
@@ -144,8 +150,10 @@ class CustomerController extends UpperController {
     }
 
     public function customerEditByNameAction($name) {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
-        $customer = $this->getCustomerByName($name);        
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
+        $customer = $this->getCustomerByName($name);
         $id = customerNameToId($name);
         $form = $this->createForm(new CustomerType(), $customer);
         $request = $this->getRequest();
@@ -164,7 +172,9 @@ class CustomerController extends UpperController {
     }
 
     public function customerListAction() {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             
@@ -175,16 +185,20 @@ class CustomerController extends UpperController {
     }
 
     public function customerRemoveByIdAction($id) {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
-        $conn = $this->get('database_connection');      
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
+        $conn = $this->get('database_connection');
         $conn->delete('zakaznik', array('id_zakaznika' => $id));
-        $this->get('session')->getFlashBag()->add('ok', 'Odstranění zákazníka proběhlo úspěšně');        
+        $this->get('session')->getFlashBag()->add('ok', 'Odstranění zákazníka proběhlo úspěšně');
         return $this->redirect($this->generateUrl('_customerList'));
     }
 
     // pouziva se to?
     public function customerRemoveAction() {
-        if(($pom = $this->timeCheck(0)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
         $conn = $this->get('database_connection');
         $this->get('session')->getFlashBag()->add('ok', 'Odstranění zákazníka proběhlo úspěšně');
         return $this->redirect($this->generateUrl('_customerList'));
@@ -192,7 +206,9 @@ class CustomerController extends UpperController {
     }
 
     public function profileAction() {
-       if(($pom = $this->timeCheck(2)) != "") {return $this->render($pom);}
+        if (($pom = $this->timeCheck(2)) != "") {
+            return $this->render($pom);
+        }
         $user = $this->getRequest()->getSession()->get("user");
         $id = $this->customerNameToId($user);
         $customer = $this->getCustomerByName($user);
@@ -215,10 +231,11 @@ class CustomerController extends UpperController {
             $form = $this->createForm(new CustomerType($suppliers, $areas), $customer);
             $this->get('session')->getFlashBag()->add('ok', 'Editace profilu byla úspěšná');
             return $this->render('DistribuceTiskuBundle:Form:profile.html.twig', array(
-            'form' => $form->createView()));
+                        'form' => $form->createView()));
         }
         return $this->render('DistribuceTiskuBundle:Form:profile.html.twig', array(
                     'form' => $form->createView()
-        ));  
+        ));
     }
+
 }

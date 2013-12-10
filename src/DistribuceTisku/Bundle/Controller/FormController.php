@@ -71,7 +71,7 @@ class FormController extends UpperController {
             $c = $request->get("titul");
             $conn = $this->get('database_connection');
 //cena 	titul 	den_vydani 	nakladatelstvi 	vydavatel
-            $sql = "UPDATE `tiskovina` SET cena='" . $c['cena'] . "', den_vydani='" . $c['denVydani'] . "', ";
+            $sql = "UPDATE `tiskovina` SET titul='" . $c['titul'] . "',issn='" . $c['issn'] . "',cena='" . $c['cena'] . "', den_vydani='" . $c['denVydani'] . "', ";
             $sql .= "nakladatelstvi='" . $c['nakladatelstvi'] . "', vydavatel='" . $c['vydavatel'] . "' , typ='" . $c['typ'] . "' WHERE ISSN='" . $id . "'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
@@ -96,7 +96,18 @@ class FormController extends UpperController {
         $books = $conn->fetchAll('SELECT * FROM tiskovina ORDER BY titul ASC');
         return $this->render('DistribuceTiskuBundle:Form:booklist.html.twig', array('books' => $books));
     }
+    
+    public function bookDeleteByIdAction($id) {
+        if (($pom = $this->timeCheck(0)) != "") {
+            return $this->render($pom);
+        }
+        $conn = $this->get('database_connection');
 
+        $conn->delete('tiskovina', array('ISSN' => $id));
+        $this->get('session')->getFlashBag()->add('ok', 'Tiskovina byla úspěšně smazána');
+        return $this->redirect($this->generateUrl('_bookList'));
+    }
+    
     public function supplierAddAction() {
         if (($pom = $this->timeCheck(0)) != "") {
             return $this->render($pom);
@@ -563,12 +574,11 @@ class FormController extends UpperController {
         $od = new \DateTime($subscription->getOdberOd());
         $do = new \DateTime($subscription->getOdberDo());
         $form = $this->makeSubscriptionForm($subscription, $od, $do);
-
         $request = $this->getRequest();
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
+        //$form->handleRequest($request);
+        if ($request->getMethod() == 'POST') {
             $c = $request->get("form");
+            $conn = $this->get('database_connection');
             $sql = "UPDATE `odber` SET `den_odberu` = '" . $c['denOdberu'] . "', `odber_od` = '" . $c['odberOd']['year'] . "-" . $c['odberOd']['month'] . "-" . $c['odberOd']['day'] . "', `odber_do` = '" . $c['odberDo']['year'] . "-" . $c['odberDo']['month'] . "-" . $c['odberDo']['day'] . "', `ISSN` = '" . $c['titul'] . "' WHERE `odber`.`id_odberu` = '" . $id . "'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
