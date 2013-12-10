@@ -32,7 +32,9 @@ class SecurityController extends Controller
         }
         
         if($type != ""){
-            $session = new Session();
+		    $session = $this->getRequest()->getSession();
+			if(!isset($session))
+				$session = new Session();
             $session->start();
             $session->set('user', $user);
             $session->set('type', $type);

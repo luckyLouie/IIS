@@ -88,7 +88,7 @@ class CustomerController extends UpperController {
                 }
             }
         }
-        return $this->render('DistribuceTiskuBundle:Form:customerAdd.html.twig', array(
+        return $this->render('DistribuceTiskuBundle:Form:customeradd.html.twig', array(
                     'form' => $form->createView()
         ));
     }

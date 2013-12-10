@@ -55,7 +55,7 @@ class FormController extends UpperController {
                 return $this->redirect($this->generateUrl('_bookAdd'));
             }
         }
-        return $this->render('DistribuceTiskuBundle:Form:bookAdd.html.twig', array(
+        return $this->render('DistribuceTiskuBundle:Form:bookadd.html.twig', array(
                     'form' => $form->createView()
         ));
     }
